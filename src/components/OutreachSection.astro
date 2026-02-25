@@ -1,0 +1,36 @@
+---
+import type { Lang, OutreachItem } from "../data/siteContent";
+import SectionShell from "./SectionShell.astro";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  subtitle: string;
+  publishedLabel: string;
+  items: OutreachItem[];
+}
+
+const { lang, title, subtitle, publishedLabel, items } = Astro.props;
+const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+const dateFormat = new Intl.DateTimeFormat(lang === "es" ? "es-ES" : "en-US", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+---
+
+<SectionShell id="divulgacion" title={title} subtitle={subtitle}>
+  <div class="grid grid-two">
+    {items.map((post) => (
+      <article class="card">
+        <div class="card-body">
+          <h3>{t(post.title)}</h3>
+          <p>{t(post.excerpt)}</p>
+          <p class="meta">
+            <strong>{publishedLabel}:</strong> {dateFormat.format(new Date(post.date))}
+          </p>
+        </div>
+      </article>
+    ))}
+  </div>
+</SectionShell>

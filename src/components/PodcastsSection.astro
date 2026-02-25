@@ -1,0 +1,31 @@
+---
+import type { Lang, PodcastItem } from "../data/siteContent";
+import SectionShell from "./SectionShell.astro";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  subtitle: string;
+  durationLabel: string;
+  items: PodcastItem[];
+}
+
+const { lang, title, subtitle, durationLabel, items } = Astro.props;
+const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+---
+
+<SectionShell id="podcasts" title={title} subtitle={subtitle}>
+  <div class="grid grid-two">
+    {items.map((podcast) => (
+      <article class="card">
+        <div class="card-body">
+          <h3>{t(podcast.title)}</h3>
+          <p>{t(podcast.description)}</p>
+          <p class="meta">
+            <strong>{durationLabel}:</strong> {podcast.length}
+          </p>
+        </div>
+      </article>
+    ))}
+  </div>
+</SectionShell>

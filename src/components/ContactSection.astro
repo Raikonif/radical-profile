@@ -1,0 +1,34 @@
+---
+import type { ContactInfo, Lang } from "../data/siteContent";
+import SectionShell from "./SectionShell.astro";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  subtitle: string;
+  emailLabel: string;
+  cityLabel: string;
+  availabilityLabel: string;
+  info: ContactInfo;
+}
+
+const { lang, title, subtitle, emailLabel, cityLabel, availabilityLabel, info } = Astro.props;
+const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+---
+
+<SectionShell id="contacto" title={title} subtitle={subtitle}>
+  <div class="contact">
+    <article class="contact-item">
+      <strong>{emailLabel}</strong>
+      <a href={`mailto:${info.email}`}>{info.email}</a>
+    </article>
+    <article class="contact-item">
+      <strong>{cityLabel}</strong>
+      <span>{t(info.city)}</span>
+    </article>
+    <article class="contact-item">
+      <strong>{availabilityLabel}</strong>
+      <span>{t(info.availability)}</span>
+    </article>
+  </div>
+</SectionShell>

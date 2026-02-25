@@ -1,629 +1,124 @@
 ---
+import CasesSection from "../components/CasesSection.astro";
+import ContactSection from "../components/ContactSection.astro";
+import HeroSection from "../components/HeroSection.astro";
+import OutreachSection from "../components/OutreachSection.astro";
+import PodcastsSection from "../components/PodcastsSection.astro";
+import SchematicsSection from "../components/SchematicsSection.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import VideosSection from "../components/VideosSection.astro";
 import {
-    cases,
-    contactInfo,
-    outreachPosts,
-    podcasts,
-    schematics,
-    uiText,
-    videos,
-    type Lang,
+  cases,
+  contactInfo,
+  outreachPosts,
+  podcasts,
+  schematics,
+  uiText,
+  videos,
+  type Lang,
 } from "../data/siteContent";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 export const prerender = false;
 
 const queryLang = Astro.url.searchParams.get("lang");
 const cookieLang = Astro.cookies.get("lang")?.value;
 const selectedLang = (
-    queryLang === "es" || queryLang === "en" ? queryLang : cookieLang
+  queryLang === "es" || queryLang === "en" ? queryLang : cookieLang
 ) as Lang | undefined;
 const lang: Lang = selectedLang ?? "es";
 
 Astro.cookies.set("lang", lang, {
-    path: "/",
-    httpOnly: false,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 365,
+  path: "/",
+  httpOnly: false,
+  sameSite: "lax",
+  maxAge: 60 * 60 * 24 * 365,
 });
 
 const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
-const dateFormat = new Intl.DateTimeFormat(lang === "es" ? "es-ES" : "en-US", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-});
+
+const sectionLabels = {
+  inicio: t(uiText.sections.inicio),
+  casos: t(uiText.sections.casos),
+  esquemas: t(uiText.sections.esquemas),
+  divulgacion: t(uiText.sections.divulgacion),
+  podcasts: t(uiText.sections.podcasts),
+  videos: t(uiText.sections.videos),
+  contacto: t(uiText.sections.contacto),
+};
 ---
 
-<html lang={lang}>
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <meta name="description" content={t(uiText.tagline)} />
-        <title>{t(uiText.siteTitle)} | {t(uiText.role)}</title>
-        <style>
-            :root {
-                --bg: #fafafa;
-                --bg-soft: #f4f1f9;
-                --panel: rgba(255, 255, 255, 0.82);
-                --text: #27272a;
-                --muted: #52525b;
-                --border: rgba(161, 161, 170, 0.25);
-                --violet: #7c3aed;
-                --pink: #ec4899;
-                --fuchsia: #d946ef;
-                --zinc: #3f3f46;
-                --white: #ffffff;
-                --shadow: 0 24px 40px rgba(124, 58, 237, 0.15);
-            }
+<BaseLayout
+  lang={lang}
+  title={`${t(uiText.siteTitle)} | ${t(uiText.role)}`}
+  description={t(uiText.tagline)}
+  footerText={t(uiText.footer)}
+>
+  <SiteHeader
+    lang={lang}
+    siteTitle={t(uiText.siteTitle)}
+    sections={sectionLabels}
+    languageLabel={t(uiText.languageLabel)}
+    themeLabel={t(uiText.themeLabel)}
+    lightLabel={t(uiText.lightLabel)}
+    darkLabel={t(uiText.darkLabel)}
+  />
 
-            :root.dark {
-                --bg: #111116;
-                --bg-soft: #191322;
-                --panel: rgba(24, 24, 30, 0.82);
-                --text: #f5f5f5;
-                --muted: #d4d4d8;
-                --border: rgba(228, 228, 231, 0.16);
-                --violet: #a78bfa;
-                --pink: #f472b6;
-                --fuchsia: #e879f9;
-                --zinc: #f4f4f5;
-                --white: #ffffff;
-                --shadow: 0 30px 56px rgba(11, 8, 20, 0.65);
-            }
+  <main class="container">
+    <HeroSection
+      role={t(uiText.role)}
+      tagline={t(uiText.tagline)}
+      intro={t(uiText.intro)}
+      ctaCases={t(uiText.ctaCases)}
+      ctaContact={t(uiText.ctaContact)}
+    />
 
-            * {
-                box-sizing: border-box;
-            }
+    <CasesSection
+      lang={lang}
+      title={t(uiText.sections.casos)}
+      subtitle={t(uiText.caseSubtitle)}
+      diagnosisLabel={t(uiText.diagnosisLabel)}
+      items={cases}
+    />
 
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: "Sora", "Segoe UI", sans-serif;
-                color: var(--text);
-                background:
-                    radial-gradient(
-                        circle at 12% 6%,
-                        rgba(217, 70, 239, 0.24),
-                        transparent 34%
-                    ),
-                    radial-gradient(
-                        circle at 89% 20%,
-                        rgba(124, 58, 237, 0.22),
-                        transparent 36%
-                    ),
-                    linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 100%);
-                min-height: 100%;
-            }
+    <SchematicsSection
+      lang={lang}
+      title={t(uiText.sections.esquemas)}
+      subtitle={t(uiText.schemaSubtitle)}
+      items={schematics}
+    />
 
-            a {
-                color: inherit;
-                text-decoration: none;
-            }
+    <OutreachSection
+      lang={lang}
+      title={t(uiText.sections.divulgacion)}
+      subtitle={t(uiText.outreachSubtitle)}
+      publishedLabel={t(uiText.publishedLabel)}
+      items={outreachPosts}
+    />
 
-            .container {
-                width: min(1120px, 92vw);
-                margin: 0 auto;
-            }
+    <PodcastsSection
+      lang={lang}
+      title={t(uiText.sections.podcasts)}
+      subtitle={t(uiText.podcastSubtitle)}
+      durationLabel={t(uiText.durationLabel)}
+      items={podcasts}
+    />
 
-            .header {
-                position: sticky;
-                top: 0;
-                z-index: 20;
-                backdrop-filter: blur(12px);
-                background: color-mix(in srgb, var(--bg) 75%, transparent);
-                border-bottom: 1px solid var(--border);
-            }
+    <VideosSection
+      lang={lang}
+      title={t(uiText.sections.videos)}
+      subtitle={t(uiText.videoSubtitle)}
+      items={videos}
+    />
 
-            .header-inner {
-                display: flex;
-                gap: 1rem;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: space-between;
-                padding: 1rem 0;
-            }
-
-            .brand {
-                font-weight: 700;
-                letter-spacing: 0.02em;
-            }
-
-            .controls {
-                display: flex;
-                gap: 0.6rem;
-                align-items: center;
-            }
-
-            .pill {
-                border: 1px solid var(--border);
-                background: var(--panel);
-                border-radius: 999px;
-                padding: 0.4rem 0.8rem;
-                font-size: 0.85rem;
-                color: var(--muted);
-            }
-
-            .pill.is-active {
-                border-color: color-mix(
-                    in srgb,
-                    var(--fuchsia) 42%,
-                    var(--border)
-                );
-                color: var(--text);
-                font-weight: 600;
-            }
-
-            nav ul {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                gap: 1rem;
-                flex-wrap: wrap;
-            }
-
-            nav a {
-                font-size: 0.95rem;
-                color: var(--muted);
-            }
-
-            nav a:hover {
-                color: var(--fuchsia);
-            }
-
-            .hero {
-                padding: 4rem 0 3rem;
-            }
-
-            .hero-grid {
-                display: grid;
-                grid-template-columns: 1.3fr 1fr;
-                gap: 2rem;
-                align-items: center;
-            }
-
-            .hero-copy h1 {
-                margin: 0 0 0.7rem;
-                font-size: clamp(2rem, 5vw, 3.8rem);
-                line-height: 1.03;
-            }
-
-            .hero-copy p {
-                margin: 0 0 1rem;
-                color: var(--muted);
-                line-height: 1.65;
-            }
-
-            .hero-actions {
-                display: flex;
-                gap: 0.8rem;
-                flex-wrap: wrap;
-                margin-top: 1.4rem;
-            }
-
-            .button {
-                display: inline-block;
-                padding: 0.74rem 1.12rem;
-                border-radius: 0.8rem;
-                border: 1px solid transparent;
-                transition: transform 160ms ease;
-            }
-
-            .button:hover {
-                transform: translateY(-2px);
-            }
-
-            .button-primary {
-                background: linear-gradient(
-                    90deg,
-                    var(--violet),
-                    var(--fuchsia)
-                );
-                color: var(--white);
-                box-shadow: var(--shadow);
-            }
-
-            .button-secondary {
-                border-color: var(--border);
-                background: var(--panel);
-            }
-
-            .portrait {
-                border-radius: 1.2rem;
-                overflow: hidden;
-                background: var(--panel);
-                border: 1px solid var(--border);
-                box-shadow: var(--shadow);
-            }
-
-            .portrait img {
-                width: 100%;
-                height: 100%;
-                min-height: 360px;
-                object-fit: cover;
-                display: block;
-            }
-
-            .section {
-                padding: 2.5rem 0;
-            }
-
-            .section-head h2 {
-                margin: 0;
-                font-size: clamp(1.35rem, 3vw, 2.1rem);
-            }
-
-            .section-head p {
-                margin-top: 0.5rem;
-                color: var(--muted);
-            }
-
-            .grid {
-                display: grid;
-                gap: 1rem;
-                margin-top: 1.4rem;
-            }
-
-            .grid-three {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
-
-            .grid-two {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .card {
-                border: 1px solid var(--border);
-                border-radius: 1rem;
-                overflow: hidden;
-                background: var(--panel);
-            }
-
-            .card-body {
-                padding: 1rem;
-            }
-
-            .card h3 {
-                margin: 0 0 0.5rem;
-            }
-
-            .card p {
-                margin: 0.35rem 0;
-                color: var(--muted);
-            }
-
-            .card img {
-                width: 100%;
-                height: 180px;
-                object-fit: cover;
-                display: block;
-            }
-
-            .meta {
-                font-size: 0.86rem;
-            }
-
-            .video {
-                aspect-ratio: 16 / 9;
-                width: 100%;
-                border: none;
-                display: block;
-            }
-
-            .contact {
-                display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 1rem;
-                margin-top: 1rem;
-            }
-
-            .contact-item {
-                padding: 1rem;
-                border-radius: 0.9rem;
-                background: var(--panel);
-                border: 1px solid var(--border);
-            }
-
-            .contact-item strong {
-                display: block;
-                margin-bottom: 0.35rem;
-            }
-
-            footer {
-                text-align: center;
-                color: var(--muted);
-                padding: 2.2rem 0 2.8rem;
-            }
-
-            @media (max-width: 980px) {
-                .hero-grid,
-                .grid-three,
-                .grid-two,
-                .contact {
-                    grid-template-columns: 1fr;
-                }
-
-                .hero {
-                    padding-top: 2.2rem;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <script is:inline>
-            const storedTheme = localStorage.getItem("theme");
-            if (
-                storedTheme === "dark" ||
-                (!storedTheme &&
-                    window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ) {
-                document.documentElement.classList.add("dark");
-            } else {
-                document.documentElement.classList.remove("dark");
-            }
-        </script>
-
-        <header class="header">
-            <div class="container header-inner">
-                <div class="brand">{t(uiText.siteTitle)}</div>
-                <nav>
-                    <ul>
-                        <li>
-                            <a href="#inicio">{t(uiText.sections.inicio)}</a>
-                        </li>
-                        <li><a href="#casos">{t(uiText.sections.casos)}</a></li>
-                        <li>
-                            <a href="#esquemas"
-                                >{t(uiText.sections.esquemas)}</a>
-                        </li>
-                        <li>
-                            <a href="#divulgacion"
-                                >{t(uiText.sections.divulgacion)}</a>
-                        </li>
-                        <li>
-                            <a href="#podcasts"
-                                >{t(uiText.sections.podcasts)}</a>
-                        </li>
-                        <li>
-                            <a href="#videos">{t(uiText.sections.videos)}</a>
-                        </li>
-                        <li>
-                            <a href="#contacto"
-                                >{t(uiText.sections.contacto)}</a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="controls">
-                    <span class="pill">{t(uiText.languageLabel)}</span>
-                    <a
-                        class={`pill ${lang === "es" ? "is-active" : ""}`}
-                        href="/?lang=es">ES</a
-                    >
-                    <a
-                        class={`pill ${lang === "en" ? "is-active" : ""}`}
-                        href="/?lang=en">EN</a
-                    >
-                    <button
-                        id="theme-toggle"
-                        class="pill"
-                        type="button"
-                        data-light={t(uiText.lightLabel)}
-                        data-dark={t(uiText.darkLabel)}
-                        aria-label={t(uiText.themeLabel)}
-                    >
-                        {t(uiText.themeLabel)}
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <main class="container">
-            <section class="hero" id="inicio">
-                <div class="hero-grid">
-                    <div class="hero-copy">
-                        <p class="meta">{t(uiText.role)}</p>
-                        <h1>{t(uiText.tagline)}</h1>
-                        <p>{t(uiText.intro)}</p>
-                        <div class="hero-actions">
-                            <a class="button button-primary" href="#casos"
-                                >{t(uiText.ctaCases)}</a
-                            >
-                            <a class="button button-secondary" href="#contacto"
-                                >{t(uiText.ctaContact)}</a
-                            >
-                        </div>
-                    </div>
-                    <div class="portrait">
-                        <img
-                            src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80"
-                            alt="Pathology specialist portrait"
-                            loading="eager"
-                        />
-                    </div>
-                </div>
-            </section>
-
-            <section class="section" id="casos">
-                <div class="section-head">
-                    <h2>{t(uiText.sections.casos)}</h2>
-                    <p>{t(uiText.caseSubtitle)}</p>
-                </div>
-                <div class="grid grid-three">
-                    {
-                        cases.map((item) => (
-                            <article class="card">
-                                <img
-                                    src={item.image}
-                                    alt={t(item.title)}
-                                    loading="lazy"
-                                />
-                                <div class="card-body">
-                                    <h3>{t(item.title)}</h3>
-                                    <p>{t(item.summary)}</p>
-                                    <p class="meta">
-                                        <strong>
-                                            {t(uiText.diagnosisLabel)}:
-                                        </strong>{" "}
-                                        {t(item.diagnosis)}
-                                    </p>
-                                </div>
-                            </article>
-                        ))
-                    }
-                </div>
-            </section>
-
-            <section class="section" id="esquemas">
-                <div class="section-head">
-                    <h2>{t(uiText.sections.esquemas)}</h2>
-                    <p>{t(uiText.schemaSubtitle)}</p>
-                </div>
-                <div class="grid grid-two">
-                    {
-                        schematics.map((item) => (
-                            <article class="card">
-                                <img
-                                    src={item.image}
-                                    alt={t(item.title)}
-                                    loading="lazy"
-                                />
-                                <div class="card-body">
-                                    <h3>{t(item.title)}</h3>
-                                    <p>{t(item.description)}</p>
-                                </div>
-                            </article>
-                        ))
-                    }
-                </div>
-            </section>
-
-            <section class="section" id="divulgacion">
-                <div class="section-head">
-                    <h2>{t(uiText.sections.divulgacion)}</h2>
-                    <p>{t(uiText.outreachSubtitle)}</p>
-                </div>
-                <div class="grid grid-two">
-                    {
-                        outreachPosts.map((post) => (
-                            <article class="card">
-                                <div class="card-body">
-                                    <h3>{t(post.title)}</h3>
-                                    <p>{t(post.excerpt)}</p>
-                                    <p class="meta">
-                                        <strong>
-                                            {t(uiText.publishedLabel)}:
-                                        </strong>{" "}
-                                        {dateFormat.format(new Date(post.date))}
-                                    </p>
-                                </div>
-                            </article>
-                        ))
-                    }
-                </div>
-            </section>
-
-            <section class="section" id="podcasts">
-                <div class="section-head">
-                    <h2>{t(uiText.sections.podcasts)}</h2>
-                    <p>{t(uiText.podcastSubtitle)}</p>
-                </div>
-                <div class="grid grid-two">
-                    {
-                        podcasts.map((podcast) => (
-                            <article class="card">
-                                <div class="card-body">
-                                    <h3>{t(podcast.title)}</h3>
-                                    <p>{t(podcast.description)}</p>
-                                    <p class="meta">
-                                        <strong>
-                                            {t(uiText.durationLabel)}:
-                                        </strong>{" "}
-                                        {podcast.length}
-                                    </p>
-                                </div>
-                            </article>
-                        ))
-                    }
-                </div>
-            </section>
-
-            <section class="section" id="videos">
-                <div class="section-head">
-                    <h2>{t(uiText.sections.videos)}</h2>
-                    <p>{t(uiText.videoSubtitle)}</p>
-                </div>
-                <div class="grid grid-two">
-                    {
-                        videos.map((video) => (
-                            <article class="card">
-                                <iframe
-                                    class="video"
-                                    src={video.embedUrl}
-                                    title={t(video.title)}
-                                    loading="lazy"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                />
-                                <div class="card-body">
-                                    <h3>{t(video.title)}</h3>
-                                    <p>{t(video.description)}</p>
-                                </div>
-                            </article>
-                        ))
-                    }
-                </div>
-            </section>
-
-            <section class="section" id="contacto">
-                <div class="section-head">
-                    <h2>{t(uiText.sections.contacto)}</h2>
-                    <p>{t(uiText.contactSubtitle)}</p>
-                </div>
-                <div class="contact">
-                    <article class="contact-item">
-                        <strong>{t(uiText.emailLabel)}</strong>
-                        <a href={`mailto:${contactInfo.email}`}
-                            >{contactInfo.email}</a
-                        >
-                    </article>
-                    <article class="contact-item">
-                        <strong>{t(uiText.cityLabel)}</strong>
-                        <span>{t(contactInfo.city)}</span>
-                    </article>
-                    <article class="contact-item">
-                        <strong>{t(uiText.availabilityLabel)}</strong>
-                        <span>{t(contactInfo.availability)}</span>
-                    </article>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <div class="container">{t(uiText.footer)}</div>
-        </footer>
-
-        <script is:inline>
-            const root = document.documentElement;
-            const toggle = document.getElementById("theme-toggle");
-
-            const setThemeLabel = () => {
-                if (!toggle) return;
-                const dark = root.classList.contains("dark");
-                toggle.textContent = `${toggle.dataset.light}/${toggle.dataset.dark}: ${dark ? toggle.dataset.dark : toggle.dataset.light}`;
-            };
-
-            toggle?.addEventListener("click", () => {
-                root.classList.toggle("dark");
-                const dark = root.classList.contains("dark");
-                localStorage.setItem("theme", dark ? "dark" : "light");
-                setThemeLabel();
-            });
-
-            setThemeLabel();
-        </script>
-    </body>
-</html>
+    <ContactSection
+      lang={lang}
+      title={t(uiText.sections.contacto)}
+      subtitle={t(uiText.contactSubtitle)}
+      emailLabel={t(uiText.emailLabel)}
+      cityLabel={t(uiText.cityLabel)}
+      availabilityLabel={t(uiText.availabilityLabel)}
+      info={contactInfo}
+    />
+  </main>
+</BaseLayout>

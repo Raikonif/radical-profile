@@ -1,0 +1,35 @@
+---
+import type { Lang, VideoItem } from "../data/siteContent";
+import SectionShell from "./SectionShell.astro";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  subtitle: string;
+  items: VideoItem[];
+}
+
+const { lang, title, subtitle, items } = Astro.props;
+const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+---
+
+<SectionShell id="videos" title={title} subtitle={subtitle}>
+  <div class="grid grid-two">
+    {items.map((video) => (
+      <article class="card">
+        <iframe
+          class="video"
+          src={video.embedUrl}
+          title={t(video.title)}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+        <div class="card-body">
+          <h3>{t(video.title)}</h3>
+          <p>{t(video.description)}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</SectionShell>
