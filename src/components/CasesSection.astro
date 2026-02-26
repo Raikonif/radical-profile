@@ -3,11 +3,11 @@ import type { CaseItem, Lang } from "../data/siteContent";
 import SectionShell from "./SectionShell.astro";
 
 interface Props {
-  lang: Lang;
-  title: string;
-  subtitle: string;
-  diagnosisLabel: string;
-  items: CaseItem[];
+    lang: Lang;
+    title: string;
+    subtitle: string;
+    diagnosisLabel: string;
+    items: CaseItem[];
 }
 
 const { lang, title, subtitle, diagnosisLabel, items } = Astro.props;
@@ -15,18 +15,28 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 ---
 
 <SectionShell id="casos" title={title} subtitle={subtitle}>
-  <div class="grid grid-three">
-    {items.map((item) => (
-      <article class="card">
-        <img src={item.image} alt={t(item.title)} loading="lazy" />
-        <div class="card-body">
-          <h3>{t(item.title)}</h3>
-          <p>{t(item.summary)}</p>
-          <p class="meta">
-            <strong>{diagnosisLabel}:</strong> {t(item.diagnosis)}
-          </p>
-        </div>
-      </article>
-    ))}
-  </div>
+    <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {
+            items.map((item) => (
+                <article class="overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+                    <img
+                        class="block h-48 w-full object-cover"
+                        src={item.image}
+                        alt={t(item.title)}
+                        loading="lazy"
+                    />
+                    <div class="space-y-2 p-4">
+                        <h3 class="text-lg font-semibold">{t(item.title)}</h3>
+                        <p class="text-zinc-600 dark:text-zinc-300">
+                            {t(item.summary)}
+                        </p>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                            <strong>{diagnosisLabel}:</strong>{" "}
+                            {t(item.diagnosis)}
+                        </p>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
 </SectionShell>

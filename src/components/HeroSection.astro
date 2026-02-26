@@ -1,32 +1,53 @@
 ---
 interface Props {
-  role: string;
-  tagline: string;
-  intro: string;
-  ctaCases: string;
-  ctaContact: string;
+    role: string;
+    tagline: string;
+    intro: string;
+    ctaCases: string;
+    ctaContact: string;
 }
 
 const { role, tagline, intro, ctaCases, ctaContact } = Astro.props;
 ---
 
-<section class="hero" id="inicio">
-  <div class="hero-grid">
-    <div class="hero-copy">
-      <p class="meta">{role}</p>
-      <h1>{tagline}</h1>
-      <p>{intro}</p>
-      <div class="hero-actions">
-        <a class="button button-primary" href="#casos">{ctaCases}</a>
-        <a class="button button-secondary" href="#contacto">{ctaContact}</a>
-      </div>
+<section class="pb-12 pt-10 md:pt-16" id="inicio">
+    <div class="grid items-center gap-8 md:grid-cols-[1.3fr_1fr]">
+        <div>
+            <p class="text-sm text-zinc-600 dark:text-zinc-400">{role}</p>
+            <h1
+                class="mt-2 text-4xl leading-[1.03] font-bold text-zinc-900 dark:text-zinc-50 md:text-6xl"
+            >
+                {tagline}
+            </h1>
+            <p
+                class="mt-4 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300"
+            >
+                {intro}
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+                <a
+                    class="inline-flex rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-500 px-4 py-3 text-sm font-medium text-white shadow-[0_16px_32px_rgba(124,58,237,0.34)] transition hover:-translate-y-0.5"
+                    href="#casos"
+                >
+                    {ctaCases}
+                </a>
+                <a
+                    class="inline-flex rounded-xl border border-zinc-300 bg-white/75 px-4 py-3 text-sm font-medium text-zinc-800 transition hover:-translate-y-0.5 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-100"
+                    href="#contacto"
+                >
+                    {ctaContact}
+                </a>
+            </div>
+        </div>
+        <div
+            class="overflow-hidden rounded-2xl border border-zinc-200 bg-white/70 shadow-[0_20px_36px_rgba(124,58,237,0.2)] dark:border-zinc-700 dark:bg-zinc-900/70 dark:shadow-[0_28px_52px_rgba(10,8,20,0.64)]"
+        >
+            <img
+                class="block h-full min-h-[360px] w-full object-cover"
+                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80"
+                alt="Pathology specialist portrait"
+                loading="eager"
+            />
+        </div>
     </div>
-    <div class="portrait">
-      <img
-        src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80"
-        alt="Pathology specialist portrait"
-        loading="eager"
-      />
-    </div>
-  </div>
 </section>

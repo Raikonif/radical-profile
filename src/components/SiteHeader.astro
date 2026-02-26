@@ -2,54 +2,217 @@
 import type { Lang } from "../data/siteContent";
 
 interface Props {
-  lang: Lang;
-  siteTitle: string;
-  languageLabel: string;
-  themeLabel: string;
-  lightLabel: string;
-  darkLabel: string;
-  sections: {
-    inicio: string;
-    casos: string;
-    esquemas: string;
-    divulgacion: string;
-    podcasts: string;
-    videos: string;
-    contacto: string;
-  };
+    lang: Lang;
+    siteTitle: string;
+    languageLabel: string;
+    themeLabel: string;
+    lightLabel: string;
+    darkLabel: string;
+    sections: {
+        inicio: string;
+        casos: string;
+        esquemas: string;
+        divulgacion: string;
+        podcasts: string;
+        videos: string;
+        contacto: string;
+    };
 }
 
-const { lang, siteTitle, languageLabel, themeLabel, lightLabel, darkLabel, sections } = Astro.props;
+const {
+    lang,
+    siteTitle,
+    languageLabel,
+    themeLabel,
+    lightLabel,
+    darkLabel,
+    sections,
+} = Astro.props;
 ---
 
-<header class="header">
-  <div class="container header-inner">
-    <div class="brand">{siteTitle}</div>
-    <nav>
-      <ul>
-        <li><a href="#inicio">{sections.inicio}</a></li>
-        <li><a href="#casos">{sections.casos}</a></li>
-        <li><a href="#esquemas">{sections.esquemas}</a></li>
-        <li><a href="#divulgacion">{sections.divulgacion}</a></li>
-        <li><a href="#podcasts">{sections.podcasts}</a></li>
-        <li><a href="#videos">{sections.videos}</a></li>
-        <li><a href="#contacto">{sections.contacto}</a></li>
-      </ul>
-    </nav>
-    <div class="controls">
-      <span class="pill">{languageLabel}</span>
-      <a class={`pill ${lang === "es" ? "is-active" : ""}`} href="/?lang=es">ES</a>
-      <a class={`pill ${lang === "en" ? "is-active" : ""}`} href="/?lang=en">EN</a>
-      <button
-        id="theme-toggle"
-        class="pill"
-        type="button"
-        data-light={lightLabel}
-        data-dark={darkLabel}
-        aria-label={themeLabel}
-      >
-        {themeLabel}
-      </button>
+<header class="sticky top-3 z-40 pb-1">
+    <div class="mx-auto w-[min(1120px,92vw)]">
+        <div
+            class="grid items-center gap-4 rounded-2xl border border-fuchsia-400/30 bg-white/65 p-4 shadow-[0_18px_42px_rgba(124,58,237,0.16)] backdrop-blur-lg transition-all duration-300 dark:border-fuchsia-300/20 dark:bg-zinc-900/65 dark:shadow-[0_18px_42px_rgba(3,2,9,0.6)] lg:grid-cols-[auto_1fr_auto]"
+        >
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-4 w-4 rounded-full bg-[radial-gradient(circle,_#f472b6,_#d946ef)] shadow-[0_0_0_5px_rgba(217,70,239,0.18),0_0_24px_rgba(236,72,153,0.5)]"
+                >
+                </div>
+                <div>
+                    <div class="text-base font-bold tracking-[0.03em]">
+                        {siteTitle}
+                    </div>
+                    <div
+                        class="text-[0.68rem] uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-400"
+                    >
+                        Pathology Studio
+                    </div>
+                </div>
+            </div>
+
+            <nav
+                class="overflow-x-auto [scrollbar-width:thin]"
+                aria-label="Primary"
+            >
+                <ul
+                    class="flex min-w-max flex-nowrap items-center gap-2 lg:min-w-0 lg:flex-wrap lg:justify-center"
+                >
+                    <li>
+                        <a
+                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
+                            href="#inicio">{sections.inicio}</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
+                            href="#casos">{sections.casos}</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
+                            href="#esquemas">{sections.esquemas}</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
+                            href="#divulgacion">{sections.divulgacion}</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
+                            href="#podcasts">{sections.podcasts}</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
+                            href="#videos">{sections.videos}</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
+                            href="#contacto">{sections.contacto}</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+
+            <div
+                class="flex flex-wrap items-center justify-between gap-2 lg:justify-end"
+            >
+                <span
+                    class="rounded-full border border-violet-400/30 bg-transparent px-3 py-1.5 text-[0.7rem] uppercase tracking-[0.08em] text-zinc-500 dark:text-zinc-300"
+                >
+                    {languageLabel}
+                </span>
+                <div
+                    class="relative inline-grid grid-cols-2 rounded-full border border-violet-400/25 bg-zinc-100/80 p-1 dark:bg-zinc-800/80"
+                >
+                    <span
+                        id="lang-slider"
+                        class:list={[
+                            "pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none",
+                            lang === "en" && "translate-x-10",
+                        ]}></span>
+                    <a
+                        data-lang-link
+                        data-lang="es"
+                        class:list={[
+                            "relative z-10 w-10 rounded-full px-3 py-1 text-center text-[0.7rem] uppercase tracking-[0.09em] transition-colors duration-300",
+                            lang === "es"
+                                ? "text-white"
+                                : "text-zinc-700 dark:text-zinc-200",
+                        ]}
+                        href="/?lang=es"
+                    >
+                        ES
+                    </a>
+                    <a
+                        data-lang-link
+                        data-lang="en"
+                        class:list={[
+                            "relative z-10 w-10 rounded-full px-3 py-1 text-center text-[0.7rem] uppercase tracking-[0.09em] transition-colors duration-300",
+                            lang === "en"
+                                ? "text-white"
+                                : "text-zinc-700 dark:text-zinc-200",
+                        ]}
+                        href="/?lang=en"
+                    >
+                        EN
+                    </a>
+                </div>
+                <div
+                    class="relative inline-grid grid-cols-2 rounded-full border border-violet-400/25 bg-zinc-100/80 p-1 dark:bg-zinc-800/80"
+                    aria-label={themeLabel}
+                    role="group"
+                >
+                    <span
+                        id="theme-slider"
+                        class="pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none"
+                    ></span>
+                    <button
+                        data-theme-option
+                        data-theme="light"
+                        class="relative z-10 flex w-10 items-center justify-center rounded-full px-2 py-1 text-zinc-700 transition-colors duration-300 dark:text-zinc-200"
+                        type="button"
+                        aria-label={lightLabel}
+                    >
+                        <span class="sr-only">{lightLabel}</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2"></path>
+                            <path d="M12 20v2"></path>
+                            <path d="m4.93 4.93 1.41 1.41"></path>
+                            <path d="m17.66 17.66 1.41 1.41"></path>
+                            <path d="M2 12h2"></path>
+                            <path d="M20 12h2"></path>
+                            <path d="m6.34 17.66-1.41 1.41"></path>
+                            <path d="m19.07 4.93-1.41 1.41"></path>
+                        </svg>
+                    </button>
+                    <button
+                        data-theme-option
+                        data-theme="dark"
+                        class="relative z-10 flex w-10 items-center justify-center rounded-full px-2 py-1 text-zinc-700 transition-colors duration-300 dark:text-zinc-200"
+                        type="button"
+                        aria-label={darkLabel}
+                    >
+                        <span class="sr-only">{darkLabel}</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M12 3a6 6 0 1 0 9 9 9 9 0 1 1-9-9"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </header>

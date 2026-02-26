@@ -3,10 +3,10 @@ import type { Lang, SchemaItem } from "../data/siteContent";
 import SectionShell from "./SectionShell.astro";
 
 interface Props {
-  lang: Lang;
-  title: string;
-  subtitle: string;
-  items: SchemaItem[];
+    lang: Lang;
+    title: string;
+    subtitle: string;
+    items: SchemaItem[];
 }
 
 const { lang, title, subtitle, items } = Astro.props;
@@ -14,15 +14,24 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 ---
 
 <SectionShell id="esquemas" title={title} subtitle={subtitle}>
-  <div class="grid grid-two">
-    {items.map((item) => (
-      <article class="card">
-        <img src={item.image} alt={t(item.title)} loading="lazy" />
-        <div class="card-body">
-          <h3>{t(item.title)}</h3>
-          <p>{t(item.description)}</p>
-        </div>
-      </article>
-    ))}
-  </div>
+    <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        {
+            items.map((item) => (
+                <article class="overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+                    <img
+                        class="block h-48 w-full object-cover"
+                        src={item.image}
+                        alt={t(item.title)}
+                        loading="lazy"
+                    />
+                    <div class="space-y-2 p-4">
+                        <h3 class="text-lg font-semibold">{t(item.title)}</h3>
+                        <p class="text-zinc-600 dark:text-zinc-300">
+                            {t(item.description)}
+                        </p>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
 </SectionShell>

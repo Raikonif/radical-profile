@@ -8,14 +8,14 @@ import SchematicsSection from "../components/SchematicsSection.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import VideosSection from "../components/VideosSection.astro";
 import {
-  cases,
-  contactInfo,
-  outreachPosts,
-  podcasts,
-  schematics,
-  uiText,
-  videos,
-  type Lang,
+    cases,
+    contactInfo,
+    outreachPosts,
+    podcasts,
+    schematics,
+    uiText,
+    videos,
+    type Lang,
 } from "../data/siteContent";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
@@ -24,101 +24,101 @@ export const prerender = false;
 const queryLang = Astro.url.searchParams.get("lang");
 const cookieLang = Astro.cookies.get("lang")?.value;
 const selectedLang = (
-  queryLang === "es" || queryLang === "en" ? queryLang : cookieLang
+    queryLang === "es" || queryLang === "en" ? queryLang : cookieLang
 ) as Lang | undefined;
 const lang: Lang = selectedLang ?? "es";
 
 Astro.cookies.set("lang", lang, {
-  path: "/",
-  httpOnly: false,
-  sameSite: "lax",
-  maxAge: 60 * 60 * 24 * 365,
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 365,
 });
 
 const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 
 const sectionLabels = {
-  inicio: t(uiText.sections.inicio),
-  casos: t(uiText.sections.casos),
-  esquemas: t(uiText.sections.esquemas),
-  divulgacion: t(uiText.sections.divulgacion),
-  podcasts: t(uiText.sections.podcasts),
-  videos: t(uiText.sections.videos),
-  contacto: t(uiText.sections.contacto),
+    inicio: t(uiText.sections.inicio),
+    casos: t(uiText.sections.casos),
+    esquemas: t(uiText.sections.esquemas),
+    divulgacion: t(uiText.sections.divulgacion),
+    podcasts: t(uiText.sections.podcasts),
+    videos: t(uiText.sections.videos),
+    contacto: t(uiText.sections.contacto),
 };
 ---
 
 <BaseLayout
-  lang={lang}
-  title={`${t(uiText.siteTitle)} | ${t(uiText.role)}`}
-  description={t(uiText.tagline)}
-  footerText={t(uiText.footer)}
->
-  <SiteHeader
     lang={lang}
-    siteTitle={t(uiText.siteTitle)}
-    sections={sectionLabels}
-    languageLabel={t(uiText.languageLabel)}
-    themeLabel={t(uiText.themeLabel)}
-    lightLabel={t(uiText.lightLabel)}
-    darkLabel={t(uiText.darkLabel)}
-  />
-
-  <main class="container">
-    <HeroSection
-      role={t(uiText.role)}
-      tagline={t(uiText.tagline)}
-      intro={t(uiText.intro)}
-      ctaCases={t(uiText.ctaCases)}
-      ctaContact={t(uiText.ctaContact)}
+    title={`${t(uiText.siteTitle)} | ${t(uiText.role)}`}
+    description={t(uiText.tagline)}
+    footerText={t(uiText.footer)}
+>
+    <SiteHeader
+        lang={lang}
+        siteTitle={t(uiText.siteTitle)}
+        sections={sectionLabels}
+        languageLabel={t(uiText.languageLabel)}
+        themeLabel={t(uiText.themeLabel)}
+        lightLabel={t(uiText.lightLabel)}
+        darkLabel={t(uiText.darkLabel)}
     />
 
-    <CasesSection
-      lang={lang}
-      title={t(uiText.sections.casos)}
-      subtitle={t(uiText.caseSubtitle)}
-      diagnosisLabel={t(uiText.diagnosisLabel)}
-      items={cases}
-    />
+    <main class="mx-auto w-[min(1120px,92vw)]">
+        <HeroSection
+            role={t(uiText.role)}
+            tagline={t(uiText.tagline)}
+            intro={t(uiText.intro)}
+            ctaCases={t(uiText.ctaCases)}
+            ctaContact={t(uiText.ctaContact)}
+        />
 
-    <SchematicsSection
-      lang={lang}
-      title={t(uiText.sections.esquemas)}
-      subtitle={t(uiText.schemaSubtitle)}
-      items={schematics}
-    />
+        <CasesSection
+            lang={lang}
+            title={t(uiText.sections.casos)}
+            subtitle={t(uiText.caseSubtitle)}
+            diagnosisLabel={t(uiText.diagnosisLabel)}
+            items={cases}
+        />
 
-    <OutreachSection
-      lang={lang}
-      title={t(uiText.sections.divulgacion)}
-      subtitle={t(uiText.outreachSubtitle)}
-      publishedLabel={t(uiText.publishedLabel)}
-      items={outreachPosts}
-    />
+        <SchematicsSection
+            lang={lang}
+            title={t(uiText.sections.esquemas)}
+            subtitle={t(uiText.schemaSubtitle)}
+            items={schematics}
+        />
 
-    <PodcastsSection
-      lang={lang}
-      title={t(uiText.sections.podcasts)}
-      subtitle={t(uiText.podcastSubtitle)}
-      durationLabel={t(uiText.durationLabel)}
-      items={podcasts}
-    />
+        <OutreachSection
+            lang={lang}
+            title={t(uiText.sections.divulgacion)}
+            subtitle={t(uiText.outreachSubtitle)}
+            publishedLabel={t(uiText.publishedLabel)}
+            items={outreachPosts}
+        />
 
-    <VideosSection
-      lang={lang}
-      title={t(uiText.sections.videos)}
-      subtitle={t(uiText.videoSubtitle)}
-      items={videos}
-    />
+        <PodcastsSection
+            lang={lang}
+            title={t(uiText.sections.podcasts)}
+            subtitle={t(uiText.podcastSubtitle)}
+            durationLabel={t(uiText.durationLabel)}
+            items={podcasts}
+        />
 
-    <ContactSection
-      lang={lang}
-      title={t(uiText.sections.contacto)}
-      subtitle={t(uiText.contactSubtitle)}
-      emailLabel={t(uiText.emailLabel)}
-      cityLabel={t(uiText.cityLabel)}
-      availabilityLabel={t(uiText.availabilityLabel)}
-      info={contactInfo}
-    />
-  </main>
+        <VideosSection
+            lang={lang}
+            title={t(uiText.sections.videos)}
+            subtitle={t(uiText.videoSubtitle)}
+            items={videos}
+        />
+
+        <ContactSection
+            lang={lang}
+            title={t(uiText.sections.contacto)}
+            subtitle={t(uiText.contactSubtitle)}
+            emailLabel={t(uiText.emailLabel)}
+            cityLabel={t(uiText.cityLabel)}
+            availabilityLabel={t(uiText.availabilityLabel)}
+            info={contactInfo}
+        />
+    </main>
 </BaseLayout>

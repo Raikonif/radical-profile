@@ -3,10 +3,10 @@ import type { Lang, VideoItem } from "../data/siteContent";
 import SectionShell from "./SectionShell.astro";
 
 interface Props {
-  lang: Lang;
-  title: string;
-  subtitle: string;
-  items: VideoItem[];
+    lang: Lang;
+    title: string;
+    subtitle: string;
+    items: VideoItem[];
 }
 
 const { lang, title, subtitle, items } = Astro.props;
@@ -14,22 +14,26 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 ---
 
 <SectionShell id="videos" title={title} subtitle={subtitle}>
-  <div class="grid grid-two">
-    {items.map((video) => (
-      <article class="card">
-        <iframe
-          class="video"
-          src={video.embedUrl}
-          title={t(video.title)}
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-        <div class="card-body">
-          <h3>{t(video.title)}</h3>
-          <p>{t(video.description)}</p>
-        </div>
-      </article>
-    ))}
-  </div>
+    <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        {
+            items.map((video) => (
+                <article class="overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+                    <iframe
+                        class="block aspect-video w-full border-0"
+                        src={video.embedUrl}
+                        title={t(video.title)}
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                    />
+                    <div class="space-y-2 p-4">
+                        <h3 class="text-lg font-semibold">{t(video.title)}</h3>
+                        <p class="text-zinc-600 dark:text-zinc-300">
+                            {t(video.description)}
+                        </p>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
 </SectionShell>

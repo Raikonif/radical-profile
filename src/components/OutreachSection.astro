@@ -3,34 +3,39 @@ import type { Lang, OutreachItem } from "../data/siteContent";
 import SectionShell from "./SectionShell.astro";
 
 interface Props {
-  lang: Lang;
-  title: string;
-  subtitle: string;
-  publishedLabel: string;
-  items: OutreachItem[];
+    lang: Lang;
+    title: string;
+    subtitle: string;
+    publishedLabel: string;
+    items: OutreachItem[];
 }
 
 const { lang, title, subtitle, publishedLabel, items } = Astro.props;
 const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 const dateFormat = new Intl.DateTimeFormat(lang === "es" ? "es-ES" : "en-US", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
 });
 ---
 
 <SectionShell id="divulgacion" title={title} subtitle={subtitle}>
-  <div class="grid grid-two">
-    {items.map((post) => (
-      <article class="card">
-        <div class="card-body">
-          <h3>{t(post.title)}</h3>
-          <p>{t(post.excerpt)}</p>
-          <p class="meta">
-            <strong>{publishedLabel}:</strong> {dateFormat.format(new Date(post.date))}
-          </p>
-        </div>
-      </article>
-    ))}
-  </div>
+    <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        {
+            items.map((post) => (
+                <article class="rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+                    <div class="space-y-2 p-4">
+                        <h3 class="text-lg font-semibold">{t(post.title)}</h3>
+                        <p class="text-zinc-600 dark:text-zinc-300">
+                            {t(post.excerpt)}
+                        </p>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                            <strong>{publishedLabel}:</strong>{" "}
+                            {dateFormat.format(new Date(post.date))}
+                        </p>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
 </SectionShell>
