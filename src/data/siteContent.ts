@@ -151,7 +151,7 @@ export const cases: CaseItem[] = [
       en: "Non-invasive follicular neoplasia",
     },
     image:
-      "https://images.unsplash.com/photo-1579154203451-2f50f2f4c5e0?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
@@ -258,10 +258,10 @@ export const videos: VideoItem[] = [
 ];
 
 export const contactInfo: ContactInfo = {
-  email: "valeria.cifuentes@pathology-example.com",
-  city: { es: "Madrid, Espana", en: "Madrid, Spain" },
+  email: "nandyycp@gmail.com",
+  city: { es: "La Paz, Bolivia", en: "La Paz, Bolivia" },
   availability: {
-    es: "Lunes a viernes, 09:00 - 17:00 (CET)",
-    en: "Monday to Friday, 09:00 - 17:00 (CET)",
+    es: "Lunes a viernes, 09:00 - 17:00 (UTC)",
+    en: "Monday to Friday, 09:00 - 17:00 (UTC)",
   },
 };
