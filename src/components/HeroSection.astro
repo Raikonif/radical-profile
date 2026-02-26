@@ -26,13 +26,13 @@ const { role, tagline, intro, ctaCases, ctaContact } = Astro.props;
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
                 <a
-                    class="inline-flex rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-500 px-4 py-3 text-sm font-medium text-white shadow-[0_16px_32px_rgba(124,58,237,0.34)] transition hover:-translate-y-0.5"
+                    class="inline-flex rounded-xl border border-fuchsia-400/35 bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] px-4 py-3 text-sm font-medium shadow-[0_16px_32px_rgba(124,58,237,0.2)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/85 dark:border-fuchsia-300/25 dark:bg-zinc-900/70 text-zinc-100 dark:hover:bg-zinc-800/80"
                     href="#casos"
                 >
                     {ctaCases}
                 </a>
                 <a
-                    class="inline-flex rounded-xl border border-zinc-300 bg-white/75 px-4 py-3 text-sm font-medium text-zinc-800 transition hover:-translate-y-0.5 dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-100"
+                    class="inline-flex rounded-xl border border-fuchsia-400/30 bg-white/65 px-4 py-3 text-sm font-medium text-zinc-700 backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-fuchsia-400/40 hover:bg-white/75 hover:text-zinc-900 dark:border-fuchsia-300/20 dark:bg-zinc-900/65 dark:text-zinc-200 dark:hover:bg-zinc-800/80 dark:hover:text-zinc-100"
                     href="#contacto"
                 >
                     {ctaContact}
