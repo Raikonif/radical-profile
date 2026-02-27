@@ -18,7 +18,7 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
     <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {
             items.map((item) => (
-                <article class="overflow-hidden rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+                <article class="overflow-hidden rounded-2xl border border-fuchsia-400/25 bg-white/65 shadow-[0_18px_36px_rgba(124,58,237,0.14)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-fuchsia-400/35 hover:bg-white/75 dark:border-fuchsia-300/20 dark:bg-violet-950/65 dark:shadow-[0_20px_42px_rgba(3,2,9,0.58)] dark:hover:bg-violet-900/75">
                     <img
                         class="block h-48 w-full object-cover"
                         src={item.image}
@@ -27,10 +27,10 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
                     />
                     <div class="space-y-2 p-4">
                         <h3 class="text-lg font-semibold">{t(item.title)}</h3>
-                        <p class="text-zinc-600 dark:text-zinc-300">
+                        <p class="text-zinc-600 dark:text-violet-300">
                             {t(item.summary)}
                         </p>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                        <p class="text-sm text-zinc-600 dark:text-violet-400">
                             <strong>{diagnosisLabel}:</strong>{" "}
                             {t(item.diagnosis)}
                         </p>
