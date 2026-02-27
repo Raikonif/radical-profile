@@ -18,15 +18,15 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
     <div class="mt-6 grid gap-4 lg:grid-cols-2">
         {
             items.map((podcast) => (
-                <article class="rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+                <article class="rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-violet-800 dark:bg-violet-950/70">
                     <div class="space-y-2 p-4">
                         <h3 class="text-lg font-semibold">
                             {t(podcast.title)}
                         </h3>
-                        <p class="text-zinc-600 dark:text-zinc-300">
+                        <p class="text-zinc-600 dark:text-violet-300">
                             {t(podcast.description)}
                         </p>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                        <p class="text-sm text-zinc-600 dark:text-violet-400">
                             <strong>{durationLabel}:</strong> {podcast.length}
                         </p>
                     </div>
