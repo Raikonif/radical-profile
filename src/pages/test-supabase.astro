@@ -1,16 +1,18 @@
-
 ---
-import { supabase } from '../db/supabase';
+import { supabase } from "../db/supabase";
+import { BaseLayout } from "@/layouts/BaseLayout";
 
-const { data, error } = await supabase.from("todos").select('*');
+const { data, error } = await supabase.from("todos").select("*");
 ---
 
-{
-  (
-    <ul>
-      {data.map((entry) => (
-        <li>{entry.name}</li>
-      ))}
-    </ul>
-  )
-}
+<BaseLayout>
+    {
+        (
+            <ul>
+                {data.map((entry) => (
+                    <li>{entry.name}</li>
+                ))}
+            </ul>
+        )
+    }
+</BaseLayout>
