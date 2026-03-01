@@ -27,7 +27,7 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 <SectionShell id="contacto" title={title} subtitle={subtitle}>
     <div class="mt-4 grid gap-4 md:grid-cols-3">
         <article
-            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-violet-800 dark:bg-violet-950/70"
+            class="rounded-xl border border-fuchsia-400/25 bg-white/65 p-4 shadow-[0_18px_36px_rgba(124,58,237,0.14)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-fuchsia-400/35 hover:bg-white/75 dark:border-fuchsia-300/20 dark:bg-violet-950/65 dark:shadow-[0_20px_42px_rgba(3,2,9,0.58)] dark:hover:bg-violet-900/75"
         >
             <strong
                 class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-violet-400"
@@ -39,16 +39,18 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
             >
         </article>
         <article
-            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-violet-800 dark:bg-violet-950/70"
+            class="rounded-xl border border-fuchsia-400/25 bg-white/65 p-4 shadow-[0_18px_36px_rgba(124,58,237,0.14)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-fuchsia-400/35 hover:bg-white/75 dark:border-fuchsia-300/20 dark:bg-violet-950/65 dark:shadow-[0_20px_42px_rgba(3,2,9,0.58)] dark:hover:bg-violet-900/75"
         >
             <strong
                 class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-violet-400"
                 >{cityLabel}</strong
             >
-            <span class="text-zinc-700 dark:text-violet-200">{t(info.city)}</span>
+            <span class="text-zinc-700 dark:text-violet-200"
+                >{t(info.city)}</span
+            >
         </article>
         <article
-            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-violet-800 dark:bg-violet-950/70"
+            class="rounded-xl border border-fuchsia-400/25 bg-white/65 p-4 shadow-[0_18px_36px_rgba(124,58,237,0.14)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-fuchsia-400/35 hover:bg-white/75 dark:border-fuchsia-300/20 dark:bg-violet-950/65 dark:shadow-[0_20px_42px_rgba(3,2,9,0.58)] dark:hover:bg-violet-900/75"
         >
             <strong
                 class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-violet-400"
