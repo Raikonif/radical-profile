@@ -1,18 +1,20 @@
 ---
-import { supabase } from "../db/supabase";
-import { BaseLayout } from "@/layouts/BaseLayout";
+import { supabase } from "@/lib/supabase";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-const { data, error } = await supabase.from("todos").select("*");
+const { data, error } = await supabase.from("cases").select("*");
+const rows = data ?? [];
 ---
 
-<BaseLayout>
-    {
-        (
-            <ul>
-                {data.map((entry) => (
-                    <li>{entry.name}</li>
-                ))}
-            </ul>
-        )
-    }
+<BaseLayout
+    lang="en"
+    title="Supabase Test"
+    description="Test page for Supabase todos query."
+    footerText="Supabase test page"
+>
+    {error ? <p>Query error: {error.message}</p> : null}
+
+    <ul>
+        {rows.map((entry: any) => <li>{entry.title}</li>)}
+    </ul>
 </BaseLayout>
