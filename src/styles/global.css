@@ -1,3 +1,27 @@
 @import "tailwindcss";
-@import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+
+@layer utilities {
+    .scrollbar-fuchsia {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(217, 70, 239, 0.85) transparent;
+    }
+
+    .scrollbar-fuchsia::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+
+    .scrollbar-fuchsia::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollbar-fuchsia::-webkit-scrollbar-thumb {
+        background-color: rgba(217, 70, 239, 0.85);
+        border-radius: 9999px;
+    }
+
+    .scrollbar-fuchsia::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(192, 38, 211, 0.95);
+    }
+}

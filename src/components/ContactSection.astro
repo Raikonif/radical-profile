@@ -27,34 +27,34 @@ const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 <SectionShell id="contacto" title={title} subtitle={subtitle}>
     <div class="mt-4 grid gap-4 md:grid-cols-3">
         <article
-            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-zinc-700 dark:bg-zinc-900/70"
+            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-violet-800 dark:bg-violet-950/70"
         >
             <strong
-                class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-zinc-400"
+                class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-violet-400"
                 >{emailLabel}</strong
             >
             <a
-                class="text-zinc-800 hover:text-fuchsia-600 dark:text-zinc-100 dark:hover:text-fuchsia-300"
+                class="text-zinc-800 hover:text-fuchsia-600 dark:text-violet-100 dark:hover:text-fuchsia-300"
                 href={`mailto:${info.email}`}>{info.email}</a
             >
         </article>
         <article
-            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-zinc-700 dark:bg-zinc-900/70"
+            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-violet-800 dark:bg-violet-950/70"
         >
             <strong
-                class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-zinc-400"
+                class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-violet-400"
                 >{cityLabel}</strong
             >
-            <span class="text-zinc-700 dark:text-zinc-200">{t(info.city)}</span>
+            <span class="text-zinc-700 dark:text-violet-200">{t(info.city)}</span>
         </article>
         <article
-            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-zinc-700 dark:bg-zinc-900/70"
+            class="rounded-xl border border-zinc-200 bg-white/80 p-4 dark:border-violet-800 dark:bg-violet-950/70"
         >
             <strong
-                class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-zinc-400"
+                class="mb-1 block text-sm uppercase tracking-[0.08em] text-zinc-500 dark:text-violet-400"
                 >{availabilityLabel}</strong
             >
-            <span class="text-zinc-700 dark:text-zinc-200"
+            <span class="text-zinc-700 dark:text-violet-200"
                 >{t(info.availability)}</span
             >
         </article>

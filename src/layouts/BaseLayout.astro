@@ -40,7 +40,7 @@ const { lang, title, description, footerText } = Astro.props;
         </script>
     </head>
     <body
-        class="min-h-screen bg-zinc-50 font-['Sora'] text-zinc-800 antialiased transition-colors duration-300 dark:bg-[#111116] dark:text-zinc-100"
+        class="min-h-screen bg-zinc-50 font-['Sora'] text-zinc-800 antialiased transition-colors duration-300 dark:bg-violet-950 dark:shadow-[0_0_20px_rgba(217,70,239,0.36)] dark:text-violet-100"
     >
         <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
             <div
@@ -60,7 +60,7 @@ const { lang, title, description, footerText } = Astro.props;
         <slot />
 
         <footer
-            class="pb-11 pt-9 text-center text-sm text-zinc-600 dark:text-zinc-400"
+            class="pb-11 pt-9 text-center text-sm text-zinc-600 dark:text-violet-400"
         >
             <div class="mx-auto w-[min(1120px,92vw)]">{footerText}</div>
         </footer>
@@ -86,7 +86,7 @@ const { lang, title, description, footerText } = Astro.props;
                     const isActive = option.getAttribute("data-theme") === mode;
                     option.classList.toggle("text-white", isActive);
                     option.classList.toggle("text-zinc-700", !isActive);
-                    option.classList.toggle("dark:text-zinc-200", !isActive);
+                    option.classList.toggle("dark:text-violet-200", !isActive);
                 });
             };
 

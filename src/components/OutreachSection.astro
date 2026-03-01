@@ -23,13 +23,13 @@ const dateFormat = new Intl.DateTimeFormat(lang === "es" ? "es-ES" : "en-US", {
     <div class="mt-6 grid gap-4 lg:grid-cols-2">
         {
             items.map((post) => (
-                <article class="rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-zinc-700 dark:bg-zinc-900/70">
+                <article class="rounded-2xl border border-zinc-200 bg-white/80 shadow-sm dark:border-violet-800 dark:bg-violet-950/70">
                     <div class="space-y-2 p-4">
                         <h3 class="text-lg font-semibold">{t(post.title)}</h3>
-                        <p class="text-zinc-600 dark:text-zinc-300">
+                        <p class="text-zinc-600 dark:text-violet-300">
                             {t(post.excerpt)}
                         </p>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                        <p class="text-sm text-zinc-600 dark:text-violet-400">
                             <strong>{publishedLabel}:</strong>{" "}
                             {dateFormat.format(new Date(post.date))}
                         </p>
