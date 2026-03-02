@@ -1,0 +1,20 @@
+---
+import { supabase } from "@/lib/supabase";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const { data, error } = await supabase.from("cases").select("*");
+const rows = data ?? [];
+---
+
+<BaseLayout
+    lang="en"
+    title="Supabase Test"
+    description="Test page for Supabase todos query."
+    footerText="Supabase test page"
+>
+    {error ? <p>Query error: {error.message}</p> : null}
+
+    <ul>
+        {rows.map((entry: any) => <li>{entry.title}</li>)}
+    </ul>
+</BaseLayout>
