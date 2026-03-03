@@ -22,13 +22,39 @@ Astro.cookies.set("lang", lang, {
 const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 
 const sectionLabels = {
-    inicio: lang === "es" ? "Studio" : "Studio",
-    casos: lang === "es" ? "Launch" : "Launch",
-    esquemas: lang === "es" ? "Gallery" : "Gallery",
-    divulgacion: lang === "es" ? "Playlists" : "Playlists",
-    podcasts: lang === "es" ? "Preview" : "Preview",
-    videos: lang === "es" ? "Crosslinks" : "Crosslinks",
-    contacto: lang === "es" ? "Contact" : "Contact",
+    inicio: t(uiText.sections.inicio),
+    casos: t(uiText.sections.casos),
+    esquemas: t(uiText.sections.esquemas),
+    divulgacion: t(uiText.sections.divulgacion),
+    podcasts: t(uiText.sections.podcasts),
+    videos: t(uiText.sections.videos),
+    contacto: t(uiText.sections.contacto),
+};
+
+const pageText = {
+    studioLabel: { es: "Laboratorio de video", en: "Video lab" },
+    heroTitle: {
+        es: "Pagina mock de videos para experimentar con cards, embeds y gradientes de cristal.",
+        en: "Mock videos page to experiment with glass cards, embeds, and gradients.",
+    },
+    heroBody: {
+        es: "Estructura util para demos de contenido audiovisual medico con componentes reutilizables.",
+        en: "Useful structure for demos of medical audiovisual content with reusable components.",
+    },
+    videosCount: { es: "Videos", en: "Videos" },
+    averageRuntime: { es: "Duracion media", en: "Average runtime" },
+    collections: { es: "Colecciones", en: "Collections" },
+    clip: { es: "Clip", en: "Clip" },
+    playlistsMock: { es: "Playlists mock", en: "Mock playlists" },
+    introSeries: { es: "Serie introductoria", en: "Intro series" },
+    caseDebates: { es: "Debates de casos", en: "Case debates" },
+    qualityProcess: { es: "Calidad y procesos", en: "Quality and process" },
+    previewMode: {
+        es: "Preview mode activo: contenido de ejemplo para pruebas visuales y navegacion.",
+        en: "Preview mode enabled: sample content for visual and navigation testing.",
+    },
+    goPodcasts: { es: "Ir a mock de podcasts", en: "Go to podcasts mock" },
+    backHome: { es: "Volver al homepage", en: "Back to homepage" },
 };
 
 const mockedVideos = [
@@ -59,6 +85,8 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
         lang={lang}
         siteTitle={t(uiText.siteTitle)}
         homeHref={`/?lang=${lang}`}
+        currentPath={Astro.url.pathname}
+        currentSearch={Astro.url.search}
         sections={sectionLabels}
         languageLabel={t(uiText.languageLabel)}
         themeLabel={t(uiText.themeLabel)}
@@ -74,23 +102,15 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
             <p
                 class="text-xs uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-300"
             >
-                {lang === "es" ? "Video lab" : "Video lab"}
+                {t(pageText.studioLabel)}
             </p>
             <h1
                 class="mt-3 max-w-3xl text-3xl font-extrabold text-zinc-900 dark:text-zinc-100 md:text-5xl"
             >
-                {
-                    lang === "es"
-                        ? "Pagina mock de videos para experimentar con cards, embeds y gradientes de cristal."
-                        : "Mock videos page to experiment with glass cards, embeds, and gradients."
-                }
+                {t(pageText.heroTitle)}
             </h1>
             <p class="mt-4 max-w-2xl text-sm text-zinc-700 dark:text-zinc-300">
-                {
-                    lang === "es"
-                        ? "Estructura util para demos de contenido audiovisual medico con componentes reutilizables."
-                        : "Useful structure for demos of medical audiovisual content with reusable components."
-                }
+                {t(pageText.heroBody)}
             </p>
             <div class="mt-5 flex flex-wrap gap-2">
                 {
@@ -110,7 +130,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                 <p
                     class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400"
                 >
-                    {lang === "es" ? "Videos" : "Videos"}
+                    {t(pageText.videosCount)}
                 </p>
                 <p
                     class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100"
@@ -124,7 +144,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                 <p
                     class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400"
                 >
-                    {lang === "es" ? "Duracion media" : "Average runtime"}
+                    {t(pageText.averageRuntime)}
                 </p>
                 <p
                     class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100"
@@ -138,7 +158,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                 <p
                     class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400"
                 >
-                    {lang === "es" ? "Colecciones" : "Collections"}
+                    {t(pageText.collections)}
                 </p>
                 <p
                     class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100"
@@ -164,7 +184,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                         </div>
                         <div class="p-5">
                             <p class="text-xs uppercase tracking-[0.12em] text-zinc-500 dark:text-zinc-400">
-                                {lang === "es" ? "Clip" : "Clip"}{" "}
+                                {t(pageText.clip)}{" "}
                                 {String(idx + 1).padStart(2, "0")}
                             </p>
                             <h2 class="mt-2 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
@@ -184,7 +204,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
             class="mt-8 rounded-2xl border border-indigo-400/20 bg-white/60 p-6 backdrop-blur-md dark:border-indigo-300/15 dark:bg-[#181528]/70"
         >
             <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                {lang === "es" ? "Playlists mock" : "Mock playlists"}
+                {t(pageText.playlistsMock)}
             </h2>
             <div class="mt-4 grid gap-3 sm:grid-cols-3">
                 <div
@@ -196,7 +216,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                         Basics in 7
                     </p>
                     <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                        {lang === "es" ? "Serie introductoria" : "Intro series"}
+                        {t(pageText.introSeries)}
                     </p>
                 </div>
                 <div
@@ -208,7 +228,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                         Boardroom Cases
                     </p>
                     <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                        {lang === "es" ? "Debates de casos" : "Case debates"}
+                        {t(pageText.caseDebates)}
                     </p>
                 </div>
                 <div
@@ -220,11 +240,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                         Lab Quality Notes
                     </p>
                     <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                        {
-                            lang === "es"
-                                ? "Calidad y procesos"
-                                : "Quality and process"
-                        }
+                        {t(pageText.qualityProcess)}
                     </p>
                 </div>
             </div>
@@ -234,11 +250,7 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
             id="podcasts"
             class="mt-8 rounded-2xl border border-fuchsia-400/20 bg-white/60 p-5 text-sm text-zinc-700 backdrop-blur-md dark:border-fuchsia-300/15 dark:bg-[#1a1528]/70 dark:text-zinc-300"
         >
-            {
-                lang === "es"
-                    ? "Preview mode activo: contenido de ejemplo para pruebas visuales y navegacion."
-                    : "Preview mode enabled: sample content for visual and navigation testing."
-            }
+            {t(pageText.previewMode)}
         </section>
 
         <section id="videos" class="mt-8 grid gap-4 md:grid-cols-2">
@@ -246,17 +258,13 @@ const pills = ["Histology", "Reporting", "Decision Trees", "Tumor Boards"];
                 href={`/podcasts?lang=${lang}`}
                 class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
             >
-                {
-                    lang === "es"
-                        ? "Ir a mock de podcasts"
-                        : "Go to podcasts mock"
-                }
+                {t(pageText.goPodcasts)}
             </a>
             <a
                 href={`/?lang=${lang}`}
                 class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
             >
-                {lang === "es" ? "Volver al homepage" : "Back to homepage"}
+                {t(pageText.backHome)}
             </a>
         </section>
 

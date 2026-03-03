@@ -58,6 +58,8 @@ const sectionLabels = {
         lang={lang}
         siteTitle={t(uiText.siteTitle)}
         homeHref={`/?lang=${lang}`}
+        currentPath={Astro.url.pathname}
+        currentSearch={Astro.url.search}
         sections={sectionLabels}
         languageLabel={t(uiText.languageLabel)}
         themeLabel={t(uiText.themeLabel)}

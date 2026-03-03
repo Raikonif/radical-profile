@@ -6,6 +6,8 @@ interface Props {
     siteTitle: string;
     homeHref?: string;
     homeAriaLabel?: string;
+    currentPath?: string;
+    currentSearch?: string;
     languageLabel: string;
     themeLabel: string;
     lightLabel: string;
@@ -26,12 +28,24 @@ const {
     siteTitle,
     homeHref = `/?lang=${lang}`,
     homeAriaLabel = lang === "es" ? "Ir al inicio" : "Go to homepage",
+    currentPath = Astro.url.pathname,
+    currentSearch = Astro.url.search,
     languageLabel,
     themeLabel,
     lightLabel,
     darkLabel,
     sections,
 } = Astro.props;
+
+const buildLangHref = (targetLang: Lang) => {
+    const params = new URLSearchParams(currentSearch);
+    params.set("lang", targetLang);
+    const query = params.toString();
+    return query ? `${currentPath}?${query}` : currentPath;
+};
+
+const langHrefEs = buildLangHref("es");
+const langHrefEn = buildLangHref("en");
 ---
 
 <header class="sticky top-3 z-40 pb-1">
@@ -135,7 +149,7 @@ const {
                                 ? "text-white"
                                 : "text-zinc-700 dark:text-violet-200",
                         ]}
-                        href="/?lang=es"
+                        href={langHrefEs}
                     >
                         ES
                     </a>
@@ -148,7 +162,7 @@ const {
                                 ? "text-white"
                                 : "text-zinc-700 dark:text-violet-200",
                         ]}
-                        href="/?lang=en"
+                        href={langHrefEn}
                     >
                         EN
                     </a>

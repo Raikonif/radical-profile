@@ -22,13 +22,44 @@ Astro.cookies.set("lang", lang, {
 const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
 
 const sectionLabels = {
-    inicio: lang === "es" ? "Studio" : "Studio",
-    casos: lang === "es" ? "Highlights" : "Highlights",
-    esquemas: lang === "es" ? "Series" : "Series",
-    divulgacion: lang === "es" ? "Formats" : "Formats",
-    podcasts: lang === "es" ? "Episodes" : "Episodes",
-    videos: lang === "es" ? "Links" : "Links",
-    contacto: lang === "es" ? "Booking" : "Booking",
+    inicio: t(uiText.sections.inicio),
+    casos: t(uiText.sections.casos),
+    esquemas: t(uiText.sections.esquemas),
+    divulgacion: t(uiText.sections.divulgacion),
+    podcasts: t(uiText.sections.podcasts),
+    videos: t(uiText.sections.videos),
+    contacto: t(uiText.sections.contacto),
+};
+
+const pageText = {
+    studioLabel: { es: "Estudio de podcasts", en: "Podcast studio" },
+    heroTitle: {
+        es: "Pagina mock para probar layout de podcasts con estilo glass y cards editoriales.",
+        en: "Mock page to test podcast layouts with glass style and editorial cards.",
+    },
+    heroBody: {
+        es: "Todo el contenido es de demostracion: episodios simulados, bloques visuales y estructura para prototipar rapido.",
+        en: "All content is demo-only: simulated episodes, visual blocks, and structure for rapid prototyping.",
+    },
+    episodes: { es: "Episodios", en: "Episodes" },
+    publishedHours: { es: "Horas publicadas", en: "Published hours" },
+    activeSeries: { es: "Series activas", en: "Active series" },
+    mockSeries: { es: "Series mock", en: "Mock series" },
+    concept: { es: "Concepto", en: "Concept" },
+    audio: { es: "Audio", en: "Audio" },
+    availableFormats: { es: "Formatos disponibles", en: "Available formats" },
+    quickNotes: { es: "Notas clinicas rapidas", en: "Clinical Quick Notes" },
+    deepDives: { es: "Analisis de casos", en: "Case Deep Dives" },
+    teachingCapsules: {
+        es: "Capsulas docentes",
+        en: "Teaching Capsules",
+    },
+    goVideos: { es: "Ir a mock de videos", en: "Go to videos mock" },
+    backHome: { es: "Volver al homepage", en: "Back to homepage" },
+    booking: {
+        es: "Reserva mock: nandyycp@gmail.com",
+        en: "Mock booking: nandyycp@gmail.com",
+    },
 };
 
 const mockedEpisodes = [
@@ -59,15 +90,15 @@ const mockedEpisodes = [
 
 const stats = [
     {
-        label: lang === "es" ? "Episodios" : "Episodes",
+        label: t(pageText.episodes),
         value: mockedEpisodes.length.toString().padStart(2, "0"),
     },
     {
-        label: lang === "es" ? "Horas publicadas" : "Published hours",
+        label: t(pageText.publishedHours),
         value: lang === "es" ? "09h" : "09h",
     },
     {
-        label: lang === "es" ? "Series activas" : "Active series",
+        label: t(pageText.activeSeries),
         value: "04",
     },
 ];
@@ -83,6 +114,8 @@ const stats = [
         lang={lang}
         siteTitle={t(uiText.siteTitle)}
         homeHref={`/?lang=${lang}`}
+        currentPath={Astro.url.pathname}
+        currentSearch={Astro.url.search}
         sections={sectionLabels}
         languageLabel={t(uiText.languageLabel)}
         themeLabel={t(uiText.themeLabel)}
@@ -102,23 +135,15 @@ const stats = [
             <p
                 class="text-xs uppercase tracking-[0.16em] text-violet-600 dark:text-violet-300"
             >
-                {lang === "es" ? "Podcast Studio" : "Podcast Studio"}
+                {t(pageText.studioLabel)}
             </p>
             <h1
                 class="mt-3 max-w-3xl text-3xl font-extrabold leading-tight text-zinc-900 dark:text-zinc-100 md:text-5xl"
             >
-                {
-                    lang === "es"
-                        ? "Mock page para probar layout de podcasts con estilo glass y cards editoriales."
-                        : "Mock page to test podcast layouts with glass style and editorial cards."
-                }
+                {t(pageText.heroTitle)}
             </h1>
             <p class="mt-4 max-w-2xl text-sm text-zinc-700 dark:text-zinc-300">
-                {
-                    lang === "es"
-                        ? "Todo el contenido es de demostracion: episodios simulados, bloques visuales y estructura para prototipar rapido."
-                        : "All content is demo-only: simulated episodes, visual blocks, and structure for rapid prototyping."
-                }
+                {t(pageText.heroBody)}
             </p>
         </section>
 
@@ -140,12 +165,12 @@ const stats = [
         <section id="esquemas" class="mt-8">
             <div class="flex items-center justify-between gap-3">
                 <h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                    {lang === "es" ? "Series mock" : "Mock series"}
+                    {t(pageText.mockSeries)}
                 </h2>
                 <span
                     class="rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-xs uppercase tracking-[0.12em] text-violet-700 dark:text-violet-300"
                 >
-                    {lang === "es" ? "concept" : "concept"}
+                    {t(pageText.concept)}
                 </span>
             </div>
 
@@ -170,7 +195,7 @@ const stats = [
                                         {episode.length}
                                     </span>
                                     <span class="text-xs uppercase tracking-[0.11em] text-violet-700 dark:text-violet-300">
-                                        {lang === "es" ? "Audio" : "Audio"}
+                                        {t(pageText.audio)}
                                     </span>
                                 </div>
                             </div>
@@ -185,7 +210,7 @@ const stats = [
             class="mt-8 rounded-2xl border border-violet-400/20 bg-gradient-to-r from-white/60 via-fuchsia-50/60 to-violet-50/70 p-6 backdrop-blur-lg dark:from-[#171222]/70 dark:via-[#201430]/70 dark:to-[#181225]/70"
         >
             <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                {lang === "es" ? "Formatos disponibles" : "Available formats"}
+                {t(pageText.availableFormats)}
             </h2>
             <div class="mt-4 grid gap-3 sm:grid-cols-3">
                 <div
@@ -194,7 +219,7 @@ const stats = [
                     <p
                         class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
                     >
-                        Clinical Quick Notes
+                        {t(pageText.quickNotes)}
                     </p>
                     <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
                         8-12 min
@@ -206,7 +231,7 @@ const stats = [
                     <p
                         class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
                     >
-                        Case Deep Dives
+                        {t(pageText.deepDives)}
                     </p>
                     <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
                         25-40 min
@@ -218,7 +243,7 @@ const stats = [
                     <p
                         class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
                     >
-                        Teaching Capsules
+                        {t(pageText.teachingCapsules)}
                     </p>
                     <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
                         15-20 min
@@ -232,13 +257,13 @@ const stats = [
                 href={`/videos?lang=${lang}`}
                 class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
             >
-                {lang === "es" ? "Ir a mock de videos" : "Go to videos mock"}
+                {t(pageText.goVideos)}
             </a>
             <a
                 href={`/?lang=${lang}`}
                 class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
             >
-                {lang === "es" ? "Volver al homepage" : "Back to homepage"}
+                {t(pageText.backHome)}
             </a>
         </section>
 
@@ -248,11 +273,7 @@ const stats = [
             id="contacto"
             class="mt-1 pb-4 text-center text-sm text-zinc-600 dark:text-zinc-300"
         >
-            {
-                lang === "es"
-                    ? "Mock booking: nandyycp@gmail.com"
-                    : "Mock booking: nandyycp@gmail.com"
-            }
+            {t(pageText.booking)}
         </section>
     </main>
 </BaseLayout>
