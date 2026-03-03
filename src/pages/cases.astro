@@ -20,6 +20,8 @@ Astro.cookies.set("lang", lang, {
 });
 
 const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+const currentPath = Astro.url.pathname;
+const currentSearch = Astro.url.search;
 
 const sectionLabels = {
     inicio: t(uiText.sections.inicio),
@@ -144,8 +146,8 @@ const mockedCases = [
         lang={lang}
         siteTitle={t(uiText.siteTitle)}
         homeHref={`/?lang=${lang}`}
-        currentPath={Astro.url.pathname}
-        currentSearch={Astro.url.search}
+        currentPath={currentPath}
+        currentSearch={currentSearch}
         sections={sectionLabels}
         languageLabel={t(uiText.languageLabel)}
         themeLabel={t(uiText.themeLabel)}

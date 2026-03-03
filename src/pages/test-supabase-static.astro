@@ -2,7 +2,7 @@
 import { supabaseServer } from "@/lib/supabase/server";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-export const prerender = false;
+export const prerender = true;
 
 type CaseRow = {
     title: string | null;
@@ -19,9 +19,9 @@ const rows: CaseRow[] = data ?? [];
 
 <BaseLayout
     lang="en"
-    title="Supabase Test (SSR)"
-    description="Request-time Supabase query from Astro server."
-    footerText="Supabase SSR test page"
+    title="Supabase Test (Static)"
+    description="Build-time Supabase query from Astro prerender."
+    footerText="Supabase static test page"
 >
     {error ? <p>Query error: {error.message}</p> : null}
 

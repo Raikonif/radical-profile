@@ -41,3 +41,14 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Supabase Data Fetching (Hybrid)
+
+- `src/pages/test-supabase.astro`: SSR (`prerender = false`) for request-time data.
+- `src/pages/test-supabase-static.astro`: static prerender (`prerender = true`) for build-time data.
+
+Client separation:
+
+- `src/lib/supabase/public.ts`: publishable/anon key client (safe with RLS).
+- `src/lib/supabase/server.ts`: server runtime client using publishable/anon key by default.
+- `src/lib/supabase/admin.ts`: secret key client for privileged server-only operations.

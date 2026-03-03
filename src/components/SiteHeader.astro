@@ -59,7 +59,7 @@ const langHrefEn = buildLangHref("en");
                 class="flex items-center gap-3 rounded-xl p-1 transition hover:bg-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/70 dark:hover:bg-violet-900/40"
             >
                 <div
-                    class="h-4 w-4 rounded-full bg-[radial-gradient(circle,_#f472b6,_#d946ef)] shadow-[0_0_0_5px_rgba(217,70,239,0.18),0_0_24px_rgba(236,72,153,0.5)]"
+                    class="h-4 w-4 rounded-full bg-[radial-gradient(circle,#f472b6,#d946ef)] shadow-[0_0_0_5px_rgba(217,70,239,0.18),0_0_24px_rgba(236,72,153,0.5)]"
                 >
                 </div>
                 <div>
@@ -137,7 +137,7 @@ const langHrefEn = buildLangHref("en");
                     <span
                         id="lang-slider"
                         class:list={[
-                            "pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none",
+                            "pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none",
                             lang === "en" && "translate-x-10",
                         ]}></span>
                     <a
@@ -174,7 +174,7 @@ const langHrefEn = buildLangHref("en");
                 >
                     <span
                         id="theme-slider"
-                        class="pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none"
+                        class="pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none"
                     ></span>
                     <button
                         data-theme-option
