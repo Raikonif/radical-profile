@@ -1,0 +1,341 @@
+---
+import SiteHeader from "@/components/SiteHeader.astro";
+import { uiText, type Lang } from "@/data/siteContent";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export const prerender = false;
+
+const queryLang = Astro.url.searchParams.get("lang");
+const cookieLang = Astro.cookies.get("lang")?.value;
+const selectedLang = (
+    queryLang === "es" || queryLang === "en" ? queryLang : cookieLang
+) as Lang | undefined;
+const lang: Lang = selectedLang ?? "es";
+
+Astro.cookies.set("lang", lang, {
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 365,
+});
+
+const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+
+const sectionLabels = {
+    inicio: t(uiText.sections.inicio),
+    casos: t(uiText.sections.casos),
+    esquemas: t(uiText.sections.esquemas),
+    divulgacion: t(uiText.sections.divulgacion),
+    podcasts: t(uiText.sections.podcasts),
+    videos: t(uiText.sections.videos),
+    contacto: t(uiText.sections.contacto),
+};
+
+const pageText = {
+    studioLabel: { es: "Casuistica GI", en: "GI caseboard" },
+    heroTitle: {
+        es: "Casos mock en anatomia patologica y gastroenterologia con diseno glass.",
+        en: "Mock anatomic pathology and gastroenterology cases with glass design.",
+    },
+    heroBody: {
+        es: "Pagina de demostracion para presentar casos digestivos, hallazgos histologicos y diagnostico final.",
+        en: "Demo page for presenting digestive cases, histologic findings, and final diagnosis.",
+    },
+    totalCases: { es: "Casos", en: "Cases" },
+    giFocus: { es: "Foco GI", en: "GI focus" },
+    boardsReady: { es: "Juntas listas", en: "Board-ready" },
+    caseSeries: { es: "Serie de casos", en: "Case series" },
+    mock: { es: "Mock", en: "Mock" },
+    diagnosis: { es: "Diagnostico", en: "Diagnosis" },
+    specimen: { es: "Muestra", en: "Specimen" },
+    complexity: { es: "Complejidad", en: "Complexity" },
+    workflowTitle: { es: "Flujo diagnostico", en: "Diagnostic workflow" },
+    workflowA: {
+        es: "Correlacion clinica y endoscopica",
+        en: "Clinical and endoscopic correlation",
+    },
+    workflowB: {
+        es: "Arquitectura glandular y actividad",
+        en: "Glandular architecture and activity",
+    },
+    workflowC: {
+        es: "Reporte estandarizado para junta",
+        en: "Standardized report for board review",
+    },
+    goPodcasts: { es: "Ir a podcasts", en: "Go to podcasts" },
+    goVideos: { es: "Ir a videos", en: "Go to videos" },
+};
+
+const mockedCases = [
+    {
+        title: {
+            es: "Adenocarcinoma gastrico incipiente en antro",
+            en: "Early gastric adenocarcinoma in antrum",
+        },
+        summary: {
+            es: "Biopsia endoscopica con displasia de alto grado y foco infiltrativo superficial.",
+            en: "Endoscopic biopsy with high-grade dysplasia and superficial invasive focus.",
+        },
+        diagnosis: {
+            es: "Adenocarcinoma tubular bien diferenciado",
+            en: "Well-differentiated tubular adenocarcinoma",
+        },
+        specimen: { es: "Biopsia gastrica", en: "Gastric biopsy" },
+        complexity: { es: "Alta", en: "High" },
+    },
+    {
+        title: {
+            es: "Colitis cronica activa con patron continuo",
+            en: "Chronic active colitis with continuous pattern",
+        },
+        summary: {
+            es: "Inflamacion mucosa difusa, distorsion criptica y actividad neutrofilica persistente.",
+            en: "Diffuse mucosal inflammation, crypt distortion, and persistent neutrophilic activity.",
+        },
+        diagnosis: {
+            es: "Compatible con colitis ulcerativa",
+            en: "Compatible with ulcerative colitis",
+        },
+        specimen: { es: "Biopsia de colon", en: "Colon biopsy" },
+        complexity: { es: "Media", en: "Medium" },
+    },
+    {
+        title: {
+            es: "Esofago de Barrett con progresion displasica",
+            en: "Barrett esophagus with dysplastic progression",
+        },
+        summary: {
+            es: "Metaplasia intestinal especializada con cambios citologicos de alto grado.",
+            en: "Specialized intestinal metaplasia with high-grade cytologic atypia.",
+        },
+        diagnosis: {
+            es: "Displasia de alto grado en Barrett",
+            en: "High-grade dysplasia in Barrett",
+        },
+        specimen: { es: "Biopsia esofagica", en: "Esophageal biopsy" },
+        complexity: { es: "Alta", en: "High" },
+    },
+    {
+        title: {
+            es: "Polipo serrado en colon derecho",
+            en: "Serrated polyp in right colon",
+        },
+        summary: {
+            es: "Lesion plana con arquitectura serrada y criptas basales dilatadas.",
+            en: "Flat lesion with serrated architecture and dilated basal crypts.",
+        },
+        diagnosis: {
+            es: "Lesion serrada sesil",
+            en: "Sessile serrated lesion",
+        },
+        specimen: { es: "Polipectomia", en: "Polypectomy" },
+        complexity: { es: "Media", en: "Medium" },
+    },
+];
+---
+
+<BaseLayout
+    lang={lang}
+    title={`${t(uiText.sections.casos)} | ${t(uiText.siteTitle)}`}
+    description={t(uiText.caseSubtitle)}
+    footerText={t(uiText.footer)}
+>
+    <SiteHeader
+        lang={lang}
+        siteTitle={t(uiText.siteTitle)}
+        homeHref={`/?lang=${lang}`}
+        currentPath={Astro.url.pathname}
+        currentSearch={Astro.url.search}
+        sections={sectionLabels}
+        languageLabel={t(uiText.languageLabel)}
+        themeLabel={t(uiText.themeLabel)}
+        lightLabel={t(uiText.lightLabel)}
+        darkLabel={t(uiText.darkLabel)}
+    />
+
+    <main class="mx-auto w-[min(1120px,92vw)] py-8">
+        <section
+            id="inicio"
+            class="relative overflow-hidden rounded-3xl border border-violet-400/30 bg-white/60 p-7 shadow-[0_25px_65px_rgba(124,58,237,0.2)] backdrop-blur-xl dark:border-violet-300/20 dark:bg-[#171222]/70"
+        >
+            <div
+                class="absolute right-0 top-0 h-44 w-44 rounded-full bg-fuchsia-400/25 blur-3xl"
+            >
+            </div>
+            <p
+                class="text-xs uppercase tracking-[0.16em] text-violet-600 dark:text-violet-300"
+            >
+                {t(pageText.studioLabel)}
+            </p>
+            <h1
+                class="mt-3 max-w-3xl text-3xl font-extrabold leading-tight text-zinc-900 dark:text-zinc-100 md:text-5xl"
+            >
+                {t(pageText.heroTitle)}
+            </h1>
+            <p class="mt-4 max-w-2xl text-sm text-zinc-700 dark:text-zinc-300">
+                {t(pageText.heroBody)}
+            </p>
+        </section>
+
+        <section id="casos" class="mt-7 grid gap-4 md:grid-cols-3">
+            <article
+                class="rounded-2xl border border-fuchsia-400/25 bg-white/55 p-5 shadow-[0_14px_34px_rgba(217,70,239,0.14)] backdrop-blur-lg dark:border-fuchsia-300/20 dark:bg-violet-950/55"
+            >
+                <p
+                    class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400"
+                >
+                    {t(pageText.totalCases)}
+                </p>
+                <p
+                    class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100"
+                >
+                    {String(mockedCases.length).padStart(2, "0")}
+                </p>
+            </article>
+            <article
+                class="rounded-2xl border border-fuchsia-400/25 bg-white/55 p-5 shadow-[0_14px_34px_rgba(217,70,239,0.14)] backdrop-blur-lg dark:border-fuchsia-300/20 dark:bg-violet-950/55"
+            >
+                <p
+                    class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400"
+                >
+                    {t(pageText.giFocus)}
+                </p>
+                <p
+                    class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100"
+                >
+                    100%
+                </p>
+            </article>
+            <article
+                class="rounded-2xl border border-fuchsia-400/25 bg-white/55 p-5 shadow-[0_14px_34px_rgba(217,70,239,0.14)] backdrop-blur-lg dark:border-fuchsia-300/20 dark:bg-violet-950/55"
+            >
+                <p
+                    class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400"
+                >
+                    {t(pageText.boardsReady)}
+                </p>
+                <p
+                    class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100"
+                >
+                    04
+                </p>
+            </article>
+        </section>
+
+        <section id="esquemas" class="mt-8">
+            <div class="flex items-center justify-between gap-3">
+                <h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                    {t(pageText.caseSeries)}
+                </h2>
+                <span
+                    class="rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-xs uppercase tracking-[0.12em] text-violet-700 dark:text-violet-300"
+                    >{t(pageText.mock)}</span
+                >
+            </div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+                {
+                    mockedCases.map((item, idx) => (
+                        <article class="group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 p-6 transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(139,92,246,0.2)] dark:border-violet-300/15 dark:bg-[#1b1529]/70">
+                            <div class="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-tr from-fuchsia-400/40 to-violet-500/20 blur-2xl" />
+                            <div class="relative">
+                                <p class="text-xs uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">
+                                    CASE {String(idx + 1).padStart(2, "0")}
+                                </p>
+                                <h3 class="mt-2 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+                                    {t(item.title)}
+                                </h3>
+                                <p class="mt-3 text-sm text-zinc-700 dark:text-zinc-300">
+                                    {t(item.summary)}
+                                </p>
+                                <div class="mt-4 grid gap-2 text-xs sm:grid-cols-1">
+                                    <span class="items-center rounded-md border border-fuchsia-400/25 bg-fuchsia-500/10 px-2.5 py-1 font-medium text-fuchsia-700 dark:text-fuchsia-200">
+                                        {t(pageText.diagnosis)}:{" "}
+                                        {t(item.diagnosis)}
+                                    </span>
+                                    <span class="rounded-md border border-violet-400/25 bg-violet-500/10 px-2.5 py-1 font-medium text-violet-700 dark:text-violet-200">
+                                        {t(pageText.specimen)}:{" "}
+                                        {t(item.specimen)}
+                                    </span>
+                                    <span class="rounded-md border border-zinc-300/60 bg-zinc-100/80 px-2.5 py-1 font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-200">
+                                        {t(pageText.complexity)}:{" "}
+                                        {t(item.complexity)}
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    ))
+                }
+            </div>
+        </section>
+
+        <section
+            id="divulgacion"
+            class="mt-8 rounded-2xl border border-violet-400/20 bg-gradient-to-r from-white/60 via-fuchsia-50/60 to-violet-50/70 p-6 backdrop-blur-lg dark:from-[#171222]/70 dark:via-[#201430]/70 dark:to-[#181225]/70"
+        >
+            <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                {t(pageText.workflowTitle)}
+            </h2>
+            <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div
+                    class="rounded-xl border border-white/40 bg-white/60 p-4 dark:border-violet-300/10 dark:bg-[#251a38]/70"
+                >
+                    <p
+                        class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+                    >
+                        1
+                    </p>
+                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+                        {t(pageText.workflowA)}
+                    </p>
+                </div>
+                <div
+                    class="rounded-xl border border-white/40 bg-white/60 p-4 dark:border-violet-300/10 dark:bg-[#251a38]/70"
+                >
+                    <p
+                        class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+                    >
+                        2
+                    </p>
+                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+                        {t(pageText.workflowB)}
+                    </p>
+                </div>
+                <div
+                    class="rounded-xl border border-white/40 bg-white/60 p-4 dark:border-violet-300/10 dark:bg-[#251a38]/70"
+                >
+                    <p
+                        class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+                    >
+                        3
+                    </p>
+                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+                        {t(pageText.workflowC)}
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="podcasts" class="mt-8 grid gap-4 md:grid-cols-2">
+            <a
+                href={`/podcasts?lang=${lang}`}
+                class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
+                >{t(pageText.goPodcasts)}</a
+            >
+            <a
+                href={`/videos?lang=${lang}`}
+                class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
+                >{t(pageText.goVideos)}</a
+            >
+        </section>
+
+        <section id="videos" class="mt-8"></section>
+
+        <section
+            id="contacto"
+            class="mt-1 pb-4 text-center text-sm text-zinc-600 dark:text-zinc-300"
+        >
+            {t(uiText.contactSubtitle)}
+        </section>
+    </main>
+</BaseLayout>
