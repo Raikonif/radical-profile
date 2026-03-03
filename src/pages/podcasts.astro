@@ -1,0 +1,258 @@
+---
+import SiteHeader from "@/components/SiteHeader.astro";
+import { podcasts, uiText, type Lang } from "@/data/siteContent";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export const prerender = false;
+
+const queryLang = Astro.url.searchParams.get("lang");
+const cookieLang = Astro.cookies.get("lang")?.value;
+const selectedLang = (
+    queryLang === "es" || queryLang === "en" ? queryLang : cookieLang
+) as Lang | undefined;
+const lang: Lang = selectedLang ?? "es";
+
+Astro.cookies.set("lang", lang, {
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 365,
+});
+
+const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+
+const sectionLabels = {
+    inicio: lang === "es" ? "Studio" : "Studio",
+    casos: lang === "es" ? "Highlights" : "Highlights",
+    esquemas: lang === "es" ? "Series" : "Series",
+    divulgacion: lang === "es" ? "Formats" : "Formats",
+    podcasts: lang === "es" ? "Episodes" : "Episodes",
+    videos: lang === "es" ? "Links" : "Links",
+    contacto: lang === "es" ? "Booking" : "Booking",
+};
+
+const mockedEpisodes = [
+    ...podcasts,
+    {
+        title: {
+            es: "Diagnostico en 10 laminas - Episodio 21",
+            en: "Diagnosis in 10 Slides - Episode 21",
+        },
+        description: {
+            es: "Decision rapida entre patron reactivo y lesion premaligna.",
+            en: "Rapid decision path between reactive pattern and premalignant lesion.",
+        },
+        length: "41 min",
+    },
+    {
+        title: {
+            es: "Patologia Sin Ruido - Episodio 3",
+            en: "Pathology Without Noise - Episode 3",
+        },
+        description: {
+            es: "Como estandarizar informes cuando el tiempo es limitado.",
+            en: "How to standardize reports when time is limited.",
+        },
+        length: "25 min",
+    },
+];
+
+const stats = [
+    {
+        label: lang === "es" ? "Episodios" : "Episodes",
+        value: mockedEpisodes.length.toString().padStart(2, "0"),
+    },
+    {
+        label: lang === "es" ? "Horas publicadas" : "Published hours",
+        value: lang === "es" ? "09h" : "09h",
+    },
+    {
+        label: lang === "es" ? "Series activas" : "Active series",
+        value: "04",
+    },
+];
+---
+
+<BaseLayout
+    lang={lang}
+    title={`${t(uiText.sections.podcasts)} | ${t(uiText.siteTitle)}`}
+    description={t(uiText.podcastSubtitle)}
+    footerText={t(uiText.footer)}
+>
+    <SiteHeader
+        lang={lang}
+        siteTitle={t(uiText.siteTitle)}
+        homeHref={`/?lang=${lang}`}
+        sections={sectionLabels}
+        languageLabel={t(uiText.languageLabel)}
+        themeLabel={t(uiText.themeLabel)}
+        lightLabel={t(uiText.lightLabel)}
+        darkLabel={t(uiText.darkLabel)}
+    />
+
+    <main class="mx-auto w-[min(1120px,92vw)] py-8">
+        <section
+            id="inicio"
+            class="relative overflow-hidden rounded-3xl border border-violet-400/30 bg-white/60 p-7 shadow-[0_25px_65px_rgba(124,58,237,0.2)] backdrop-blur-xl dark:border-violet-300/20 dark:bg-[#171222]/70"
+        >
+            <div
+                class="absolute right-0 top-0 h-44 w-44 rounded-full bg-fuchsia-400/25 blur-3xl"
+            >
+            </div>
+            <p
+                class="text-xs uppercase tracking-[0.16em] text-violet-600 dark:text-violet-300"
+            >
+                {lang === "es" ? "Podcast Studio" : "Podcast Studio"}
+            </p>
+            <h1
+                class="mt-3 max-w-3xl text-3xl font-extrabold leading-tight text-zinc-900 dark:text-zinc-100 md:text-5xl"
+            >
+                {
+                    lang === "es"
+                        ? "Mock page para probar layout de podcasts con estilo glass y cards editoriales."
+                        : "Mock page to test podcast layouts with glass style and editorial cards."
+                }
+            </h1>
+            <p class="mt-4 max-w-2xl text-sm text-zinc-700 dark:text-zinc-300">
+                {
+                    lang === "es"
+                        ? "Todo el contenido es de demostracion: episodios simulados, bloques visuales y estructura para prototipar rapido."
+                        : "All content is demo-only: simulated episodes, visual blocks, and structure for rapid prototyping."
+                }
+            </p>
+        </section>
+
+        <section id="casos" class="mt-7 grid gap-4 md:grid-cols-3">
+            {
+                stats.map((item) => (
+                    <article class="rounded-2xl border border-fuchsia-400/25 bg-white/55 p-5 shadow-[0_14px_34px_rgba(217,70,239,0.14)] backdrop-blur-lg dark:border-fuchsia-300/20 dark:bg-violet-950/55">
+                        <p class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400">
+                            {item.label}
+                        </p>
+                        <p class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+                            {item.value}
+                        </p>
+                    </article>
+                ))
+            }
+        </section>
+
+        <section id="esquemas" class="mt-8">
+            <div class="flex items-center justify-between gap-3">
+                <h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                    {lang === "es" ? "Series mock" : "Mock series"}
+                </h2>
+                <span
+                    class="rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-xs uppercase tracking-[0.12em] text-violet-700 dark:text-violet-300"
+                >
+                    {lang === "es" ? "concept" : "concept"}
+                </span>
+            </div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+                {
+                    mockedEpisodes.map((episode, idx) => (
+                        <article class="group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 p-6 transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(139,92,246,0.2)] dark:border-violet-300/15 dark:bg-[#1b1529]/70">
+                            <div class="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-tr from-fuchsia-400/40 to-violet-500/20 blur-2xl" />
+                            <div class="relative">
+                                <p class="text-xs uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">
+                                    EP {String(idx + 1).padStart(2, "0")}
+                                </p>
+                                <h3 class="mt-2 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+                                    {t(episode.title)}
+                                </h3>
+                                <p class="mt-3 text-sm text-zinc-700 dark:text-zinc-300">
+                                    {t(episode.description)}
+                                </p>
+                                <div class="mt-4 flex items-center justify-between">
+                                    <span class="rounded-full border border-fuchsia-400/25 bg-fuchsia-500/10 px-2.5 py-1 text-xs font-medium text-fuchsia-700 dark:text-fuchsia-200">
+                                        {t(uiText.durationLabel)}:{" "}
+                                        {episode.length}
+                                    </span>
+                                    <span class="text-xs uppercase tracking-[0.11em] text-violet-700 dark:text-violet-300">
+                                        {lang === "es" ? "Audio" : "Audio"}
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    ))
+                }
+            </div>
+        </section>
+
+        <section
+            id="divulgacion"
+            class="mt-8 rounded-2xl border border-violet-400/20 bg-gradient-to-r from-white/60 via-fuchsia-50/60 to-violet-50/70 p-6 backdrop-blur-lg dark:from-[#171222]/70 dark:via-[#201430]/70 dark:to-[#181225]/70"
+        >
+            <h2 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                {lang === "es" ? "Formatos disponibles" : "Available formats"}
+            </h2>
+            <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div
+                    class="rounded-xl border border-white/40 bg-white/60 p-4 dark:border-violet-300/10 dark:bg-[#251a38]/70"
+                >
+                    <p
+                        class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+                    >
+                        Clinical Quick Notes
+                    </p>
+                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+                        8-12 min
+                    </p>
+                </div>
+                <div
+                    class="rounded-xl border border-white/40 bg-white/60 p-4 dark:border-violet-300/10 dark:bg-[#251a38]/70"
+                >
+                    <p
+                        class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+                    >
+                        Case Deep Dives
+                    </p>
+                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+                        25-40 min
+                    </p>
+                </div>
+                <div
+                    class="rounded-xl border border-white/40 bg-white/60 p-4 dark:border-violet-300/10 dark:bg-[#251a38]/70"
+                >
+                    <p
+                        class="text-sm font-semibold text-zinc-900 dark:text-zinc-100"
+                    >
+                        Teaching Capsules
+                    </p>
+                    <p class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+                        15-20 min
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="podcasts" class="mt-8 grid gap-4 md:grid-cols-2">
+            <a
+                href={`/videos?lang=${lang}`}
+                class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
+            >
+                {lang === "es" ? "Ir a mock de videos" : "Go to videos mock"}
+            </a>
+            <a
+                href={`/?lang=${lang}`}
+                class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
+            >
+                {lang === "es" ? "Volver al homepage" : "Back to homepage"}
+            </a>
+        </section>
+
+        <section id="videos" class="mt-8"></section>
+
+        <section
+            id="contacto"
+            class="mt-1 pb-4 text-center text-sm text-zinc-600 dark:text-zinc-300"
+        >
+            {
+                lang === "es"
+                    ? "Mock booking: nandyycp@gmail.com"
+                    : "Mock booking: nandyycp@gmail.com"
+            }
+        </section>
+    </main>
+</BaseLayout>
