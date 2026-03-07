@@ -4,13 +4,23 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 
 export const prerender = true;
 
+const lang = "es";
+
 type CaseRow = {
-    title: string | null;
+    id: number;
+    cases_translations:
+        | {
+              title: string | null;
+              language: string | null;
+          }[]
+        | null;
 };
 
 const { data, error } = await supabaseServer
     .from("cases")
-    .select("title")
+    .select("id, cases_translations!inner(title, language, is_active)")
+    .eq("cases_translations.language", lang)
+    .eq("cases_translations.is_active", true)
     .limit(20)
     .returns<CaseRow[]>();
 
@@ -26,6 +36,12 @@ const rows: CaseRow[] = data ?? [];
     {error ? <p>Query error: {error.message}</p> : null}
 
     <ul>
-        {rows.map((entry) => <li>{entry.title ?? "Untitled case"}</li>)}
+        {
+            rows.map((entry) => (
+                <li>
+                    {entry.cases_translations?.[0]?.title ?? "Untitled case"}
+                </li>
+            ))
+        }
     </ul>
 </BaseLayout>

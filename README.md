@@ -52,3 +52,9 @@ Client separation:
 - `src/lib/supabase/public.ts`: publishable/anon key client (safe with RLS).
 - `src/lib/supabase/server.ts`: server runtime client using publishable/anon key by default.
 - `src/lib/supabase/admin.ts`: secret key client for privileged server-only operations.
+
+Content data layer:
+
+- `src/lib/content/repositories/*`: raw Supabase queries by entity (`cases`, `podcasts`, `videos`).
+- `src/lib/content/services/contentService.ts`: mapping + fallback-language orchestration.
+- `src/pages/cases.astro`, `src/pages/podcasts.astro`, `src/pages/videos.astro`: SSR by default, SSG-capable when `CONTENT_RENDER_MODE=ssg` at build time.
