@@ -1,0 +1,207 @@
+---
+import SiteHeader from "@/components/SiteHeader.astro";
+import { getPodcastsContent } from "@/lib/content";
+import type { PodcastContent } from "@/lib/content/types";
+import { uiText, type Lang } from "@/data/siteContent";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export const prerender = import.meta.env.CONTENT_RENDER_MODE === "ssg";
+
+const queryLang = Astro.url.searchParams.get("lang");
+const cookieLang = Astro.cookies.get("lang")?.value;
+const selectedLang = (
+    queryLang === "es" || queryLang === "en" ? queryLang : cookieLang
+) as Lang | undefined;
+const lang: Lang = selectedLang ?? "es";
+
+Astro.cookies.set("lang", lang, {
+    path: "/",
+    httpOnly: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 365,
+});
+
+const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+const currentPath = Astro.url.pathname;
+const currentSearch = Astro.url.search;
+
+const sectionLabels = {
+    inicio: t(uiText.sections.inicio),
+    casos: t(uiText.sections.casos),
+    esquemas: t(uiText.sections.esquemas),
+    divulgacion: t(uiText.sections.divulgacion),
+    podcasts: t(uiText.sections.podcasts),
+    videos: t(uiText.sections.videos),
+    contacto: t(uiText.sections.contacto),
+};
+
+const pageText = {
+    studioLabel: { es: "Estudio de podcasts", en: "Podcast studio" },
+    heroTitle: {
+        es: "Podcasts",
+        en: "Podcasts",
+    },
+    heroBody: {
+        es: "Lista de podcasts.",
+        en: "Podcast list.",
+    },
+    episodes: { es: "Episodios", en: "Episodes" },
+    fallbackNotice: {
+        es: "Sin resultados en este idioma. Mostrando contenido alternativo.",
+        en: "No results in this language. Showing fallback content.",
+    },
+    emptyState: {
+        es: "No hay podcasts visibles con la configuracion actual de RLS.",
+        en: "No podcasts are visible with the current RLS configuration.",
+    },
+    openFile: { es: "Abrir audio", en: "Open audio" },
+    goVideos: { es: "Ir a videos", en: "Go to videos" },
+    backHome: { es: "Volver al homepage", en: "Back to homepage" },
+};
+
+let podcastItems: PodcastContent[] = [];
+let sourceLang: Lang = lang;
+let queryError = "";
+
+try {
+    const response = await getPodcastsContent(lang, 20);
+    podcastItems = response.items;
+    sourceLang = response.sourceLang;
+} catch (error) {
+    queryError = error instanceof Error ? error.message : "Unknown error";
+}
+---
+
+<BaseLayout
+    lang={lang}
+    title={`${t(uiText.sections.podcasts)} | ${t(uiText.siteTitle)}`}
+    description={t(uiText.podcastSubtitle)}
+    footerText={t(uiText.footer)}
+>
+    <SiteHeader
+        lang={lang}
+        siteTitle={t(uiText.siteTitle)}
+        homeHref={`/?lang=${lang}`}
+        currentPath={currentPath}
+        currentSearch={currentSearch}
+        sections={sectionLabels}
+        languageLabel={t(uiText.languageLabel)}
+        themeLabel={t(uiText.themeLabel)}
+        lightLabel={t(uiText.lightLabel)}
+        darkLabel={t(uiText.darkLabel)}
+    />
+
+    <main class="mx-auto w-[min(1120px,92vw)] py-8">
+        <section
+            id="inicio"
+            class="relative overflow-hidden rounded-3xl border border-violet-400/30 bg-white/60 p-7 shadow-[0_25px_65px_rgba(124,58,237,0.2)] backdrop-blur-xl dark:border-violet-300/20 dark:bg-[#171222]/70"
+        >
+            <div
+                class="absolute right-0 top-0 h-44 w-44 rounded-full bg-fuchsia-400/25 blur-3xl"
+            >
+            </div>
+            <p
+                class="text-xs uppercase tracking-[0.16em] text-violet-600 dark:text-violet-300"
+            >
+                {t(pageText.studioLabel)}
+            </p>
+            <h1
+                class="mt-3 max-w-3xl text-3xl font-extrabold leading-tight text-zinc-900 dark:text-zinc-100 md:text-5xl"
+            >
+                {t(pageText.heroTitle)}
+            </h1>
+            <p class="mt-4 max-w-2xl text-sm text-zinc-700 dark:text-zinc-300">
+                {t(pageText.heroBody)}
+            </p>
+        </section>
+
+        <section id="casos" class="mt-7 grid gap-4 md:grid-cols-3">
+            <article
+                class="rounded-2xl border border-fuchsia-400/25 bg-white/55 p-5 shadow-[0_14px_34px_rgba(217,70,239,0.14)] backdrop-blur-lg dark:border-fuchsia-300/20 dark:bg-violet-950/55"
+            >
+                <p
+                    class="text-xs uppercase tracking-[0.11em] text-zinc-500 dark:text-zinc-400"
+                >
+                    {t(pageText.episodes)}
+                </p>
+                <p
+                    class="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100"
+                >
+                    {String(podcastItems.length).padStart(2, "0")}
+                </p>
+            </article>
+        </section>
+
+        {
+            queryError ? (
+                <section class="mt-6 rounded-xl border border-rose-400/30 bg-rose-500/10 p-4 text-sm text-rose-700 dark:text-rose-200">
+                    Supabase error: {queryError}
+                </section>
+            ) : null
+        }
+
+        {
+            !queryError && sourceLang !== lang && podcastItems.length > 0 ? (
+                <section class="mt-6 rounded-xl border border-amber-400/30 bg-amber-500/10 p-4 text-sm text-amber-700 dark:text-amber-200">
+                    {t(pageText.fallbackNotice)}
+                </section>
+            ) : null
+        }
+
+        <section id="esquemas" class="mt-8">
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+                {
+                    podcastItems.map((episode, idx) => (
+                        <article class="group relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/70 p-6 transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(139,92,246,0.2)] dark:border-violet-300/15 dark:bg-[#1b1529]/70">
+                            <div class="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-tr from-fuchsia-400/40 to-violet-500/20 blur-2xl" />
+                            <div class="relative">
+                                <p class="text-xs uppercase tracking-[0.14em] text-zinc-500 dark:text-zinc-400">
+                                    EP {String(idx + 1).padStart(2, "0")}
+                                </p>
+                                <h3 class="mt-2 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+                                    {episode.title}
+                                </h3>
+                                <p class="mt-3 text-sm text-zinc-700 dark:text-zinc-300">
+                                    {episode.body}
+                                </p>
+                                {episode.fileUrl ? (
+                                    <a
+                                        href={episode.fileUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        class="mt-4 inline-flex rounded-md border border-fuchsia-400/30 bg-fuchsia-500/10 px-3 py-1.5 text-xs font-medium text-fuchsia-700 dark:text-fuchsia-200"
+                                    >
+                                        {t(pageText.openFile)}
+                                    </a>
+                                ) : null}
+                            </div>
+                        </article>
+                    ))
+                }
+            </div>
+
+            {
+                podcastItems.length === 0 && !queryError ? (
+                    <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-300">
+                        {t(pageText.emptyState)}
+                    </p>
+                ) : null
+            }
+        </section>
+
+        <section id="podcasts" class="mt-8 grid gap-4 md:grid-cols-2">
+            <a
+                href={`/videos?lang=${lang}`}
+                class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
+            >
+                {t(pageText.goVideos)}
+            </a>
+            <a
+                href={`/?lang=${lang}`}
+                class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
+            >
+                {t(pageText.backHome)}
+            </a>
+        </section>
+    </main>
+</BaseLayout>

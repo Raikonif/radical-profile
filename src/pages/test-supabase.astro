@@ -1,20 +1,158 @@
 ---
-import { supabase } from "@/lib/supabase";
+import { supabaseServer } from "@/lib/supabase/server";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-const { data, error } = await supabase.from("cases").select("*");
-const rows = data ?? [];
+export const prerender = false;
+
+const queryLang = Astro.url.searchParams.get("lang");
+const lang = queryLang === "es" || queryLang === "en" ? queryLang : "es";
+const querySource = Astro.url.searchParams.get("source");
+const source = querySource === "admin" ? "admin" : "server";
+
+type CaseTranslationRow = {
+    id: number;
+    created_at: string;
+    title: string | null;
+    language: string | null;
+    is_active: boolean | null;
+    diagnosis: string | null;
+    complexity: string | null;
+    specimen: string | null;
+    cases:
+        | {
+              id: number;
+              user_id: string | null;
+              created_at: string;
+          }
+        | {
+              id: number;
+              user_id: string | null;
+              created_at: string;
+          }[]
+        | null;
+};
+
+async function fetchTranslations(client: SupabaseClient) {
+    return client
+        .from("cases_translations")
+        .select(
+            "id, created_at, title, language, is_active, diagnosis, complexity, specimen, cases!inner(id, user_id, created_at)",
+        )
+        .eq("is_active", true)
+        .eq("language", lang)
+        .order("created_at", { ascending: false })
+        .limit(50)
+        .returns<CaseTranslationRow[]>();
+}
+
+let clientLabel = "server (RLS)";
+let queryErrorMessage = "";
+let data: CaseTranslationRow[] | null = null;
+
+if (source === "admin") {
+    try {
+        const { supabaseAdmin } = await import("@/lib/supabase/admin");
+        clientLabel = "admin (bypass RLS)";
+        const { data: adminData, error } =
+            await fetchTranslations(supabaseAdmin);
+        data = adminData;
+        queryErrorMessage = error?.message ?? "";
+    } catch (error) {
+        queryErrorMessage =
+            error instanceof Error
+                ? `Admin client unavailable: ${error.message}`
+                : "Admin client unavailable";
+    }
+} else {
+    const { data: serverData, error } = await fetchTranslations(supabaseServer);
+    data = serverData;
+    queryErrorMessage = error?.message ?? "";
+}
+const rows: CaseTranslationRow[] = data ?? [];
+
+type CaseTranslationView = {
+    translation: {
+        id: number;
+        language: string | null;
+        title: string | null;
+        diagnosis: string | null;
+        complexity: string | null;
+        specimen: string | null;
+        createdAt: string;
+    };
+    case: {
+        id: number;
+        userId: string | null;
+        createdAt: string;
+    } | null;
+};
+
+const items: CaseTranslationView[] = rows.map((row) => {
+    const caseRelation = Array.isArray(row.cases) ? row.cases[0] : row.cases;
+
+    return {
+        translation: {
+            id: row.id,
+            language: row.language,
+            title: row.title,
+            diagnosis: row.diagnosis,
+            complexity: row.complexity,
+            specimen: row.specimen,
+            createdAt: row.created_at,
+        },
+        case: caseRelation
+            ? {
+                  id: caseRelation.id,
+                  userId: caseRelation.user_id,
+                  createdAt: caseRelation.created_at,
+              }
+            : null,
+    };
+});
 ---
 
 <BaseLayout
     lang="en"
-    title="Supabase Test"
-    description="Test page for Supabase todos query."
-    footerText="Supabase test page"
+    title="Supabase Test (SSR)"
+    description="Request-time Supabase query from Astro server."
+    footerText="Supabase SSR test page"
 >
-    {error ? <p>Query error: {error.message}</p> : null}
+    {queryErrorMessage ? <p>Query error: {queryErrorMessage}</p> : null}
+
+    <p>Filter language: {lang}</p>
+    <p>Data source: {clientLabel}</p>
+    <p>
+        Tip: use <code>?lang=es&source=admin</code> to verify raw DB rows when RLS
+        blocks server mode.
+    </p>
+
+    <p>Total translations: {items.length}</p>
 
     <ul>
-        {rows.map((entry: any) => <li>{entry.title}</li>)}
+        {
+            items.map((item) => (
+                <li>
+                    <strong>
+                        Case #{item.case?.id ?? "unknown"} - Translation #
+                        {item.translation.id}
+                    </strong>
+                    <ul>
+                        <li>
+                            Language: {item.translation.language ?? "unknown"}
+                        </li>
+                        <li>
+                            Title: {item.translation.title ?? "Untitled case"}
+                        </li>
+                        <li>Diagnosis: {item.translation.diagnosis ?? "-"}</li>
+                        <li>
+                            Complexity: {item.translation.complexity ?? "-"}
+                        </li>
+                        <li>Specimen: {item.translation.specimen ?? "-"}</li>
+                        <li>Case user_id: {item.case?.userId ?? "null"}</li>
+                    </ul>
+                </li>
+            ))
+        }
     </ul>
 </BaseLayout>

@@ -4,6 +4,10 @@ import type { Lang } from "../data/siteContent";
 interface Props {
     lang: Lang;
     siteTitle: string;
+    homeHref?: string;
+    homeAriaLabel?: string;
+    currentPath?: string;
+    currentSearch?: string;
     languageLabel: string;
     themeLabel: string;
     lightLabel: string;
@@ -22,12 +26,26 @@ interface Props {
 const {
     lang,
     siteTitle,
+    homeHref = `/?lang=${lang}`,
+    homeAriaLabel = lang === "es" ? "Ir al inicio" : "Go to homepage",
+    currentPath = Astro.url.pathname,
+    currentSearch = Astro.url.search,
     languageLabel,
     themeLabel,
     lightLabel,
     darkLabel,
     sections,
 } = Astro.props;
+
+const buildLangHref = (targetLang: Lang) => {
+    const params = new URLSearchParams(currentSearch);
+    params.set("lang", targetLang);
+    const query = params.toString();
+    return query ? `${currentPath}?${query}` : currentPath;
+};
+
+const langHrefEs = buildLangHref("es");
+const langHrefEn = buildLangHref("en");
 ---
 
 <header class="sticky top-3 z-40 pb-1">
@@ -35,9 +53,13 @@ const {
         <div
             class="grid items-center gap-4 rounded-2xl border border-fuchsia-400/30 bg-white/65 p-4 shadow-[0_18px_42px_rgba(124,58,237,0.16)] backdrop-blur-lg transition-all duration-300 dark:border-fuchsia-300/20 dark:bg-violet-950/65 dark:shadow-[0_18px_42px_rgba(3,2,9,0.6)] lg:grid-cols-[auto_1fr_auto]"
         >
-            <div class="flex items-center gap-3">
+            <a
+                href={homeHref}
+                aria-label={homeAriaLabel}
+                class="flex items-center gap-3 rounded-xl p-1 transition hover:bg-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/70 dark:hover:bg-violet-900/40"
+            >
                 <div
-                    class="h-4 w-4 rounded-full bg-[radial-gradient(circle,_#f472b6,_#d946ef)] shadow-[0_0_0_5px_rgba(217,70,239,0.18),0_0_24px_rgba(236,72,153,0.5)]"
+                    class="h-4 w-4 rounded-full bg-[radial-gradient(circle,#f472b6,#d946ef)] shadow-[0_0_0_5px_rgba(217,70,239,0.18),0_0_24px_rgba(236,72,153,0.5)]"
                 >
                 </div>
                 <div>
@@ -50,7 +72,7 @@ const {
                         Pathology Studio
                     </div>
                 </div>
-            </div>
+            </a>
 
             <nav class="scrollbar-fuchsia overflow-x-auto" aria-label="Primary">
                 <ul
@@ -115,7 +137,7 @@ const {
                     <span
                         id="lang-slider"
                         class:list={[
-                            "pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none",
+                            "pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none",
                             lang === "en" && "translate-x-10",
                         ]}></span>
                     <a
@@ -127,7 +149,7 @@ const {
                                 ? "text-white"
                                 : "text-zinc-700 dark:text-violet-200",
                         ]}
-                        href="/?lang=es"
+                        href={langHrefEs}
                     >
                         ES
                     </a>
@@ -140,7 +162,7 @@ const {
                                 ? "text-white"
                                 : "text-zinc-700 dark:text-violet-200",
                         ]}
-                        href="/?lang=en"
+                        href={langHrefEn}
                     >
                         EN
                     </a>
@@ -152,7 +174,7 @@ const {
                 >
                     <span
                         id="theme-slider"
-                        class="pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none"
+                        class="pointer-events-none absolute inset-y-1 left-1 w-10 rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_20px_rgba(217,70,239,0.36)] transition-transform duration-300 ease-out motion-reduce:transition-none"
                     ></span>
                     <button
                         data-theme-option
