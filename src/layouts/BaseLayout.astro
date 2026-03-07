@@ -1,5 +1,6 @@
 ---
-import "../styles/global.css";
+import "@/styles/global.css";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
     lang: string;
@@ -26,6 +27,7 @@ const { lang, title, description, footerText } = Astro.props;
             rel="stylesheet"
         />
         <title>{title}</title>
+        <ClientRouter />
         <script is:inline>
             const storedTheme = localStorage.getItem("theme");
             if (
@@ -66,66 +68,75 @@ const { lang, title, description, footerText } = Astro.props;
         </footer>
 
         <script is:inline>
-            const root = document.documentElement;
-            const themeSlider = document.getElementById("theme-slider");
-            const themeOptions = document.querySelectorAll(
-                "[data-theme-option]",
-            );
-            const reduceMotion = window.matchMedia(
-                "(prefers-reduced-motion: reduce)",
-            ).matches;
-
-            const setTheme = (mode) => {
-                root.classList.toggle("dark", mode === "dark");
-                localStorage.setItem("theme", mode);
-                themeSlider?.classList.toggle(
-                    "translate-x-10",
-                    mode === "dark",
+            const initUiControls = () => {
+                const root = document.documentElement;
+                const themeSlider = document.getElementById("theme-slider");
+                const themeOptions = document.querySelectorAll(
+                    "[data-theme-option]",
                 );
+                const reduceMotion = window.matchMedia(
+                    "(prefers-reduced-motion: reduce)",
+                ).matches;
+
+                const setTheme = (mode) => {
+                    root.classList.toggle("dark", mode === "dark");
+                    localStorage.setItem("theme", mode);
+                    themeSlider?.classList.toggle(
+                        "translate-x-10",
+                        mode === "dark",
+                    );
+                    themeOptions.forEach((option) => {
+                        const isActive =
+                            option.getAttribute("data-theme") === mode;
+                        option.classList.toggle("text-white", isActive);
+                        option.classList.toggle("text-zinc-700", !isActive);
+                        option.classList.toggle(
+                            "dark:text-violet-200",
+                            !isActive,
+                        );
+                    });
+                };
+
+                setTheme(root.classList.contains("dark") ? "dark" : "light");
+
                 themeOptions.forEach((option) => {
-                    const isActive = option.getAttribute("data-theme") === mode;
-                    option.classList.toggle("text-white", isActive);
-                    option.classList.toggle("text-zinc-700", !isActive);
-                    option.classList.toggle("dark:text-violet-200", !isActive);
+                    option.onclick = () => {
+                        const targetTheme = option.getAttribute("data-theme");
+                        if (!targetTheme) return;
+                        const currentTheme = root.classList.contains("dark")
+                            ? "dark"
+                            : "light";
+                        if (targetTheme === currentTheme) return;
+                        setTheme(targetTheme);
+                    };
+                });
+
+                const langSlider = document.getElementById("lang-slider");
+                const langLinks = document.querySelectorAll("[data-lang-link]");
+                const activeLang = (root.lang || "es").startsWith("en")
+                    ? "en"
+                    : "es";
+
+                langLinks.forEach((link) => {
+                    link.onclick = (event) => {
+                        const nextLang = link.getAttribute("data-lang");
+                        if (!nextLang || nextLang === activeLang) return;
+                        event.preventDefault();
+                        langSlider?.classList.toggle(
+                            "translate-x-10",
+                            nextLang === "en",
+                        );
+                        const targetUrl = link.getAttribute("href");
+                        const delay = reduceMotion ? 0 : 220;
+                        window.setTimeout(() => {
+                            if (targetUrl) window.location.href = targetUrl;
+                        }, delay);
+                    };
                 });
             };
 
-            setTheme(root.classList.contains("dark") ? "dark" : "light");
-
-            themeOptions.forEach((option) => {
-                option.addEventListener("click", () => {
-                    const targetTheme = option.getAttribute("data-theme");
-                    if (!targetTheme) return;
-                    const currentTheme = root.classList.contains("dark")
-                        ? "dark"
-                        : "light";
-                    if (targetTheme === currentTheme) return;
-                    setTheme(targetTheme);
-                });
-            });
-
-            const langSlider = document.getElementById("lang-slider");
-            const langLinks = document.querySelectorAll("[data-lang-link]");
-            const activeLang = (root.lang || "es").startsWith("en")
-                ? "en"
-                : "es";
-
-            langLinks.forEach((link) => {
-                link.addEventListener("click", (event) => {
-                    const nextLang = link.getAttribute("data-lang");
-                    if (!nextLang || nextLang === activeLang) return;
-                    event.preventDefault();
-                    langSlider?.classList.toggle(
-                        "translate-x-10",
-                        nextLang === "en",
-                    );
-                    const targetUrl = link.getAttribute("href");
-                    const delay = reduceMotion ? 0 : 220;
-                    window.setTimeout(() => {
-                        if (targetUrl) window.location.href = targetUrl;
-                    }, delay);
-                });
-            });
+            initUiControls();
+            document.addEventListener("astro:page-load", initUiControls);
         </script>
     </body>
 </html>
