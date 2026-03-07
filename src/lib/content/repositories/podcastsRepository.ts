@@ -6,6 +6,8 @@ type PodcastTranslationRow = {
   body: string | null;
   slug: string | null;
   language: string | null;
+  is_active: boolean | null;
+  podcast_id: number | null;
 };
 
 export type PodcastRow = {
@@ -20,7 +22,7 @@ export async function fetchPodcastsByLang(lang: ContentLang, limit = 20) {
   return supabaseServer
     .from("podcasts")
     .select(
-      "id, created_at, file_url, is_active, podcasts_translations!inner(title, body, slug, language, is_active)",
+      "id, created_at, file_url, is_active, podcasts_translations!podcasts_translations_podcast_id_fkey(title, body, slug, language, is_active, podcast_id)",
     )
     .eq("is_active", true)
     .eq("podcasts_translations.language", lang)

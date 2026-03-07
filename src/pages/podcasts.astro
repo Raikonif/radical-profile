@@ -1,6 +1,7 @@
 ---
 import SiteHeader from "@/components/SiteHeader.astro";
 import { getPodcastsContent } from "@/lib/content";
+import type { PodcastContent } from "@/lib/content/types";
 import { uiText, type Lang } from "@/data/siteContent";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -58,7 +59,7 @@ const pageText = {
   backHome: { es: "Volver al homepage", en: "Back to homepage" },
 };
 
-let podcastItems = [];
+let podcastItems: PodcastContent[] = [];
 let sourceLang: Lang = lang;
 let queryError = "";
 
