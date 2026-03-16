@@ -1,34 +1,61 @@
 ---
-import type { Lang, PodcastItem } from "../data/siteContent";
+import type { PodcastContent } from "@/lib/content/types";
 import SectionShell from "./SectionShell.astro";
 
 interface Props {
-    lang: Lang;
     title: string;
     subtitle: string;
-    durationLabel: string;
-    items: PodcastItem[];
+    emptyLabel: string;
+    openLabel: string;
+    viewAllLabel?: string;
+    viewAllHref?: string;
+    items: PodcastContent[];
 }
 
-const { lang, title, subtitle, durationLabel, items } = Astro.props;
-const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+const {
+    title,
+    subtitle,
+    emptyLabel,
+    openLabel,
+    viewAllLabel,
+    viewAllHref,
+    items,
+} = Astro.props;
 ---
 
-<SectionShell id="podcasts" title={title} subtitle={subtitle}>
+<SectionShell
+    id="podcasts"
+    title={title}
+    subtitle={subtitle}
+    actionHref={viewAllHref}
+    actionLabel={viewAllLabel}
+>
+    {
+        items.length === 0 ? (
+            <p class="mt-6 text-sm text-zinc-600 dark:text-violet-300">
+                {emptyLabel}
+            </p>
+        ) : null
+    }
     <div class="mt-6 grid gap-4 lg:grid-cols-2">
         {
             items.map((podcast) => (
                 <article class="glass-panel rounded-2xl border transition-all duration-300 hover:-translate-y-0.5">
                     <div class="space-y-2 p-4">
-                        <h3 class="text-lg font-semibold">
-                            {t(podcast.title)}
-                        </h3>
+                        <h3 class="text-lg font-semibold">{podcast.title}</h3>
                         <p class="text-zinc-600 dark:text-violet-300">
-                            {t(podcast.description)}
+                            {podcast.body}
                         </p>
-                        <p class="text-sm text-zinc-600 dark:text-violet-400">
-                            <strong>{durationLabel}:</strong> {podcast.length}
-                        </p>
+                        {podcast.fileUrl ? (
+                            <a
+                                href={podcast.fileUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                class="inline-flex rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-3 py-1.5 text-xs font-medium text-fuchsia-700 transition hover:border-fuchsia-500/50 dark:text-fuchsia-200"
+                            >
+                                {openLabel}
+                            </a>
+                        ) : null}
                     </div>
                 </article>
             ))
