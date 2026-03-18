@@ -1,38 +1,62 @@
 ---
-import type { CaseItem, Lang } from "../data/siteContent";
+import type { CaseContent } from "@/lib/content/types";
 import SectionShell from "./SectionShell.astro";
 
 interface Props {
-    lang: Lang;
     title: string;
     subtitle: string;
     diagnosisLabel: string;
-    items: CaseItem[];
+    emptyLabel: string;
+    viewAllLabel?: string;
+    viewAllHref?: string;
+    items: CaseContent[];
 }
 
-const { lang, title, subtitle, diagnosisLabel, items } = Astro.props;
-const t = <T extends Record<Lang, string>>(entry: T) => entry[lang];
+const {
+    title,
+    subtitle,
+    diagnosisLabel,
+    emptyLabel,
+    viewAllLabel,
+    viewAllHref,
+    items,
+} = Astro.props;
 ---
 
-<SectionShell id="casos" title={title} subtitle={subtitle}>
+<SectionShell
+    id="casos"
+    title={title}
+    subtitle={subtitle}
+    actionHref={viewAllHref}
+    actionLabel={viewAllLabel}
+>
+    {
+        items.length === 0 ? (
+            <p class="mt-6 text-sm text-zinc-600 dark:text-violet-300">
+                {emptyLabel}
+            </p>
+        ) : null
+    }
     <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {
             items.map((item) => (
-                <article class="overflow-hidden rounded-2xl border border-fuchsia-400/25 bg-white/65 shadow-[0_18px_36px_rgba(124,58,237,0.14)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-fuchsia-400/35 hover:bg-white/75 dark:border-fuchsia-300/20 dark:bg-violet-950/65 dark:shadow-[0_20px_42px_rgba(3,2,9,0.58)] dark:hover:bg-violet-900/75">
-                    <img
-                        class="block h-48 w-full object-cover"
-                        src={item.image}
-                        alt={t(item.title)}
-                        loading="lazy"
-                    />
+                <article class="glass-panel overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-0.5">
+                    {item.imageUrl ? (
+                        <img
+                            class="block h-48 w-full object-cover"
+                            src={item.imageUrl}
+                            alt={item.title}
+                            loading="lazy"
+                        />
+                    ) : null}
                     <div class="space-y-2 p-4">
-                        <h3 class="text-lg font-semibold">{t(item.title)}</h3>
+                        <h3 class="text-lg font-semibold">{item.title}</h3>
                         <p class="text-zinc-600 dark:text-violet-300">
-                            {t(item.summary)}
+                            {item.description}
                         </p>
                         <p class="text-sm text-zinc-600 dark:text-violet-400">
                             <strong>{diagnosisLabel}:</strong>{" "}
-                            {t(item.diagnosis)}
+                            {item.diagnosis || "-"}
                         </p>
                     </div>
                 </article>

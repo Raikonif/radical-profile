@@ -4,7 +4,6 @@ import type { ContentLang } from "@/lib/content/types";
 type VideoTranslationRow = {
   name: string | null;
   description: string | null;
-  language: string | null;
 };
 
 export type VideoRow = {

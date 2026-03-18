@@ -8,13 +8,20 @@ import SchematicsSection from "@/components/SchematicsSection.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import VideosSection from "@/components/VideosSection.astro";
 import {
-    cases,
+    getCasesContent,
+    getPodcastsContent,
+    getVideosContent,
+} from "@/lib/content";
+import type {
+    CaseContent,
+    PodcastContent,
+    VideoContent,
+} from "@/lib/content/types";
+import {
     contactInfo,
     outreachPosts,
-    podcasts,
     schematics,
     uiText,
-    videos,
     type Lang,
 } from "@/data/siteContent";
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -48,6 +55,49 @@ const sectionLabels = {
     videos: t(uiText.sections.videos),
     contacto: t(uiText.sections.contacto),
 };
+
+const previewText = {
+    emptyCases: {
+        es: "No hay casos disponibles por ahora.",
+        en: "No cases are available right now.",
+    },
+    emptyPodcasts: {
+        es: "No hay podcasts disponibles por ahora.",
+        en: "No podcasts are available right now.",
+    },
+    emptyVideos: {
+        es: "No hay videos disponibles por ahora.",
+        en: "No videos are available right now.",
+    },
+    viewAllCases: { es: "Ver todos los casos", en: "View all cases" },
+    viewAllPodcasts: {
+        es: "Ver todos los podcasts",
+        en: "View all podcasts",
+    },
+    viewAllVideos: { es: "Ver todos los videos", en: "View all videos" },
+    openAudio: { es: "Abrir audio", en: "Open audio" },
+    openVideo: { es: "Abrir video", en: "Open video" },
+};
+
+let previewCases: CaseContent[] = [];
+let previewPodcasts: PodcastContent[] = [];
+let previewVideos: VideoContent[] = [];
+
+try {
+    const [casesResponse, podcastsResponse, videosResponse] = await Promise.all(
+        [
+            getCasesContent(lang, 3),
+            getPodcastsContent(lang, 3),
+            getVideosContent(lang, 3),
+        ],
+    );
+
+    previewCases = casesResponse.items;
+    previewPodcasts = podcastsResponse.items;
+    previewVideos = videosResponse.items;
+} catch (error) {
+    console.error("Homepage content preview error", error);
+}
 ---
 
 <BaseLayout
@@ -79,11 +129,13 @@ const sectionLabels = {
         />
 
         <CasesSection
-            lang={lang}
             title={t(uiText.sections.casos)}
             subtitle={t(uiText.caseSubtitle)}
             diagnosisLabel={t(uiText.diagnosisLabel)}
-            items={cases}
+            emptyLabel={t(previewText.emptyCases)}
+            viewAllLabel={t(previewText.viewAllCases)}
+            viewAllHref={`/cases?lang=${lang}`}
+            items={previewCases}
         />
 
         <SchematicsSection
@@ -102,18 +154,23 @@ const sectionLabels = {
         />
 
         <PodcastsSection
-            lang={lang}
             title={t(uiText.sections.podcasts)}
             subtitle={t(uiText.podcastSubtitle)}
-            durationLabel={t(uiText.durationLabel)}
-            items={podcasts}
+            emptyLabel={t(previewText.emptyPodcasts)}
+            openLabel={t(previewText.openAudio)}
+            viewAllLabel={t(previewText.viewAllPodcasts)}
+            viewAllHref={`/podcasts?lang=${lang}`}
+            items={previewPodcasts}
         />
 
         <VideosSection
-            lang={lang}
             title={t(uiText.sections.videos)}
             subtitle={t(uiText.videoSubtitle)}
-            items={videos}
+            emptyLabel={t(previewText.emptyVideos)}
+            openLabel={t(previewText.openVideo)}
+            viewAllLabel={t(previewText.viewAllVideos)}
+            viewAllHref={`/videos?lang=${lang}`}
+            items={previewVideos}
         />
 
         <ContactSection
