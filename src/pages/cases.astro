@@ -1,4 +1,5 @@
 ---
+import FallbackImage from "@/components/FallbackImage.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import { getCasesContent } from "@/lib/content";
 import { uiText, type Lang } from "@/data/siteContent";
@@ -181,14 +182,12 @@ try {
                                 <p class="mt-3 text-sm text-zinc-700 dark:text-zinc-300">
                                     {item.description}
                                 </p>
-                                {item.imageUrl ? (
-                                    <img
-                                        class="mt-4 h-48 w-full rounded-lg object-cover"
-                                        src={item.imageUrl}
-                                        alt={item.title}
-                                        loading="lazy"
-                                    />
-                                ) : null}
+                                <FallbackImage
+                                    src={item.imageUrl}
+                                    alt={item.title}
+                                    wrapperClass="mt-4 rounded-lg"
+                                    class="block h-48 w-full object-cover"
+                                />
                                 <div class="mt-4 grid gap-2 text-xs sm:grid-cols-1">
                                     <span class="items-center rounded-md border border-fuchsia-400/25 bg-fuchsia-500/10 px-2.5 py-1 font-medium text-fuchsia-700 dark:text-fuchsia-200">
                                         {t(pageText.diagnosis)}:{" "}
