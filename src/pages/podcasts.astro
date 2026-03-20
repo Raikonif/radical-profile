@@ -192,12 +192,14 @@ try {
         <section id="podcasts" class="mt-8 grid gap-4 md:grid-cols-2">
             <a
                 href={`/videos?lang=${lang}`}
+                data-astro-prefetch="load"
                 class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
             >
                 {t(pageText.goVideos)}
             </a>
             <a
                 href={`/?lang=${lang}`}
+                data-astro-prefetch="load"
                 class="rounded-2xl border border-zinc-200 bg-white/65 p-5 text-sm text-zinc-700 transition hover:border-violet-400/40 hover:text-zinc-900 dark:border-violet-300/20 dark:bg-[#1a1429]/65 dark:text-zinc-200"
             >
                 {t(pageText.backHome)}
