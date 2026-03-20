@@ -1,5 +1,6 @@
 ---
 import type { CaseContent } from "@/lib/content/types";
+import FallbackImage from "./FallbackImage.astro";
 import SectionShell from "./SectionShell.astro";
 
 interface Props {
@@ -41,14 +42,11 @@ const {
         {
             items.map((item) => (
                 <article class="glass-panel overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-0.5">
-                    {item.imageUrl ? (
-                        <img
-                            class="block h-48 w-full object-cover"
-                            src={item.imageUrl}
-                            alt={item.title}
-                            loading="lazy"
-                        />
-                    ) : null}
+                    <FallbackImage
+                        src={item.imageUrl}
+                        alt={item.title}
+                        class="block h-48 w-full object-cover"
+                    />
                     <div class="space-y-2 p-4">
                         <h3 class="text-lg font-semibold">{item.title}</h3>
                         <p class="text-zinc-600 dark:text-violet-300">

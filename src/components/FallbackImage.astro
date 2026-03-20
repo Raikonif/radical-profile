@@ -1,0 +1,42 @@
+---
+const PLACEHOLDER_SRC = "https://placehold.co/600x400/png?text=mock";
+
+interface Props {
+    alt: string;
+    src?: string | null;
+    class?: string;
+    wrapperClass?: string;
+    loading?: "eager" | "lazy";
+}
+
+const {
+    alt,
+    src,
+    class: imageClass = "",
+    wrapperClass = "",
+    loading = "lazy",
+} = Astro.props;
+
+const resolvedSrc = src?.trim() ? src : PLACEHOLDER_SRC;
+---
+
+<div
+    class:list={[
+        "relative overflow-hidden bg-zinc-200/80 dark:bg-violet-950/40",
+        wrapperClass,
+    ]}
+>
+    <div
+        class="absolute inset-0 animate-pulse bg-[linear-gradient(110deg,rgba(255,255,255,0.12),rgba(255,255,255,0.35),rgba(255,255,255,0.12))] bg-[length:200%_100%] dark:bg-[linear-gradient(110deg,rgba(255,255,255,0.04),rgba(255,255,255,0.12),rgba(255,255,255,0.04))]"
+        data-image-skeleton
+    ></div>
+    <img
+        src={resolvedSrc}
+        alt={alt}
+        loading={loading}
+        class:list={[imageClass, "relative z-10 opacity-0 transition-opacity duration-300"]}
+        data-placeholder-src={PLACEHOLDER_SRC}
+        onload="this.style.opacity='1'; this.parentElement?.querySelector('[data-image-skeleton]')?.remove();"
+        onerror="if (this.dataset.failed !== 'true') { this.dataset.failed='true'; this.src=this.dataset.placeholderSrc || ''; return; } this.style.opacity='1'; this.parentElement?.querySelector('[data-image-skeleton]')?.remove();"
+    />
+</div>
