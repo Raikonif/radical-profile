@@ -22,6 +22,7 @@ const { id, title, subtitle, actionHref, actionLabel } = Astro.props;
             actionHref && actionLabel ? (
                 <a
                     href={actionHref}
+                    data-astro-prefetch="load"
                     class="inline-flex items-center rounded-full border border-violet-400/30 bg-white/70 px-4 py-2 text-sm font-medium text-violet-700 transition hover:border-violet-500/50 hover:text-violet-900 dark:border-violet-300/20 dark:bg-violet-950/40 dark:text-violet-200 dark:hover:text-violet-100"
                 >
                     {actionLabel}

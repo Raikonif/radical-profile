@@ -46,6 +46,37 @@ const buildLangHref = (targetLang: Lang) => {
 
 const langHrefEs = buildLangHref("es");
 const langHrefEn = buildLangHref("en");
+
+const homeRoute = `/?lang=${lang}`;
+const isHomePage = currentPath === "/";
+const buildHomeSectionHref = (sectionId: string) =>
+    isHomePage ? `#${sectionId}` : `${homeRoute}#${sectionId}`;
+
+const navLinks = [
+    { label: sections.inicio, href: homeRoute, prefetch: true },
+    { label: sections.casos, href: `/cases?lang=${lang}`, prefetch: true },
+    {
+        label: sections.esquemas,
+        href: buildHomeSectionHref("esquemas"),
+        prefetch: !isHomePage,
+    },
+    {
+        label: sections.divulgacion,
+        href: buildHomeSectionHref("divulgacion"),
+        prefetch: !isHomePage,
+    },
+    {
+        label: sections.podcasts,
+        href: `/podcasts?lang=${lang}`,
+        prefetch: true,
+    },
+    { label: sections.videos, href: `/videos?lang=${lang}`, prefetch: true },
+    {
+        label: sections.contacto,
+        href: buildHomeSectionHref("contacto"),
+        prefetch: !isHomePage,
+    },
+] as const;
 ---
 
 <header class="sticky top-3 z-40 pb-1">
@@ -55,6 +86,7 @@ const langHrefEn = buildLangHref("en");
         >
             <a
                 href={homeHref}
+                data-astro-prefetch="load"
                 aria-label={homeAriaLabel}
                 class="flex items-center gap-3 rounded-xl p-1 transition hover:bg-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/70 dark:hover:bg-violet-900/40"
             >
@@ -78,48 +110,21 @@ const langHrefEn = buildLangHref("en");
                 <ul
                     class="flex min-w-max flex-nowrap items-center gap-2 lg:min-w-0 lg:flex-wrap lg:justify-center"
                 >
-                    <li>
-                        <a
-                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
-                            href="#inicio">{sections.inicio}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
-                            href="#casos">{sections.casos}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
-                            href="#esquemas">{sections.esquemas}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
-                            href="#divulgacion">{sections.divulgacion}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
-                            href="#podcasts">{sections.podcasts}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
-                            href="#videos">{sections.videos}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
-                            href="#contacto">{sections.contacto}</a
-                        >
-                    </li>
+                    {
+                        navLinks.map((link) => (
+                            <li>
+                                <a
+                                    href={link.href}
+                                    data-astro-prefetch={
+                                        link.prefetch ? "load" : undefined
+                                    }
+                                    class="inline-flex rounded-xl border border-transparent px-3 py-1.5 text-[0.74rem] uppercase tracking-[0.08em] text-zinc-600 transition-all duration-300 hover:border-fuchsia-400/35 hover:bg-white/70 hover:text-zinc-900 dark:text-violet-300 dark:hover:bg-violet-900/80 dark:hover:text-violet-100"
+                                >
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))
+                    }
                 </ul>
             </nav>
 
